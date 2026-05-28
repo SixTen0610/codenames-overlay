@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codenames — End of Stream</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=Share+Tech+Mono&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:     #e8392a;
+  --red-dim: #7a1e15;
+  --red-bg:  rgba(232,57,42,0.12);
+  --blue:    #2a7de8;
+  --blue-dim:#153a7a;
+  --blue-bg: rgba(42,125,232,0.12);
+  --gold:    #f0c040;
+  --gold-dim:#7a6020;
+  --assassin:#ff2244;
+  --panel:   rgba(14,18,24,0.97);
+  --border:  rgba(255,255,255,0.08);
+  --text:    #e8e6e0;
+  --muted:   rgba(232,230,224,0.75);
+  --green:   #2adf80;
+}
+
+html, body {
+  width: 1920px; height: 1080px;
+  overflow: hidden; background: #050709;
+  font-family: 'Barlow', sans-serif; color: var(--text);
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: ''; pointer-events: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px; opacity: 0.35;
+}
+
+/* ── SCANLINES ── */
+body::after {
+  content: ''; pointer-events: none;
+  position: fixed; inset: 0; z-index: 9998;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 3px,
+    rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.12) 4px
+  );
+}
+
+/* ── BACKGROUND GRID ── */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(42,125,232,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42,125,232,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── CORNER ACCENTS ── */
+.corner { position: fixed; width: 60px; height: 60px; z-index: 10; }
+.corner.tl { top: 24px; left: 24px; border-top: 2px solid var(--blue-dim); border-left: 2px solid var(--blue-dim); }
+.corner.tr { top: 24px; right: 24px; border-top: 2px solid var(--red-dim); border-right: 2px solid var(--red-dim); }
+.corner.bl { bottom: 24px; left: 24px; border-bottom: 2px solid var(--blue-dim); border-left: 2px solid var(--blue-dim); }
+.corner.br { bottom: 24px; right: 24px; border-bottom: 2px solid var(--red-dim); border-right: 2px solid var(--red-dim); }
+
+/* ══════════════════════════════════════════
+   PHASE 1 — WRAP HEADER
+══════════════════════════════════════════ */
+#phase-header {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+  opacity: 0; animation: fadeIn 0.8s 0.3s ease forwards;
+}
+
+.wrap-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 22px; letter-spacing: 0.4em; color: var(--muted); font-weight: 600;
+  text-transform: uppercase;
+  animation: slideUp 0.6s 0.5s both;
+}
+.wrap-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 160px; font-weight: 900; line-height: 0.9;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  background: linear-gradient(160deg, #ffffff 30%, var(--blue) 70%, var(--red));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideUp 0.7s 0.6s both;
+}
+.wrap-subtitle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 26px; font-weight: 400; letter-spacing: 0.3em;
+  color: var(--muted); text-transform: uppercase;
+  animation: slideUp 0.6s 0.8s both;
+}
+.wrap-divider {
+  width: 400px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--blue), var(--red), transparent);
+  animation: scaleX 0.8s 1s both;
+}
+#session-summary {
+  display: flex; gap: 60px; align-items: center;
+  animation: slideUp 0.6s 1.1s both;
+}
+.sess-stat {
+  text-align: center;
+}
+.sess-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 52px; line-height: 1; color: var(--gold);
+}
+.sess-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--muted); margin-top: 4px;
+}
+.sess-divider {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--border), transparent);
+}
+.timing-grid {
+  display: grid; grid-template-columns: repeat(4, 200px); gap: 12px 24px;
+  animation: slideUp 0.6s 1.3s both;
+}
+.timing-cell { text-align: center; }
+.timing-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px; line-height: 1; font-weight: 400;
+}
+.timing-lbl {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--muted); margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════
+   PHASE 2 — AWARDS
+══════════════════════════════════════════ */
+#phase-awards {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  opacity: 0; pointer-events: none;
+}
+
+.awards-header {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.4em;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 40px;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 520px);
+  grid-template-rows: repeat(2, auto);
+  gap: 20px 24px;
+}
+
+.award-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px 28px;
+  position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(20px);
+}
+.award-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.award-card.blue::before  { background: linear-gradient(to right, var(--blue-dim), var(--blue)); }
+.award-card.red::before   { background: linear-gradient(to right, var(--red-dim), var(--red)); }
+.award-card.gold::before  { background: linear-gradient(to right, var(--gold-dim), var(--gold)); }
+.award-card.green::before { background: linear-gradient(to right, #1a6e3e, var(--green)); }
+.award-card.assassin::before { background: linear-gradient(to right, #7a0015, var(--assassin)); }
+
+.award-icon  { font-size: 28px; margin-bottom: 10px; display: block; }
+.award-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+}
+.award-winner {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 38px; font-weight: 900; letter-spacing: 0.04em;
+  line-height: 1; text-transform: uppercase;
+}
+.award-card.blue  .award-winner { color: var(--blue); }
+.award-card.red   .award-winner { color: var(--red); }
+.award-card.gold  .award-winner { color: var(--gold); }
+.award-card.green .award-winner { color: var(--green); }
+.award-card.assassin .award-winner { color: var(--assassin); }
+
+.award-stat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px; color: var(--muted); margin-top: 6px; letter-spacing: 0.05em;
+}
+.award-tie {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; color: var(--muted); font-style: italic; margin-top: 3px;
+}
+.no-data { color: var(--muted) !important; font-size: 22px !important; }
+
+/* MVP card spans full width */
+.award-card.mvp-card {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 40px;
+  padding: 28px 40px;
+}
+.award-card.mvp-card .award-icon { font-size: 48px; margin: 0; }
+.award-card.mvp-card .award-winner { font-size: 60px; }
+.award-card.mvp-card .award-info { flex: 1; }
+
+/* ══════════════════════════════════════════
+   PHASE 3 — CREDITS ROLL
+══════════════════════════════════════════ */
+#phase-credits {
+  position: fixed; inset: 0; z-index: 100;
+  overflow: hidden; opacity: 0; pointer-events: none;
+}
+
+#credits-scroll {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 900px;
+  display: flex; flex-direction: column; align-items: center;
+  top: 1080px; /* starts off-screen, JS animates */
+}
+
+.credits-logo {
+  margin-bottom: 60px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 80px; font-weight: 900; letter-spacing: 0.1em;
+  text-align: center; text-transform: uppercase;
+  background: linear-gradient(160deg, #ffffff 20%, var(--blue) 60%, var(--red));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.credits-logo-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px; letter-spacing: 0.35em; color: var(--muted);
+  text-align: center; margin-top: -50px; margin-bottom: 70px;
+}
+
+.credits-section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 700; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--text);
+  text-align: center; margin-bottom: 28px; margin-top: 48px;
+}
+.credits-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 30px 0;
+}
+
+.credits-player {
+  width: 100%; display: grid;
+  grid-template-columns: 1fr 160px 160px 160px 160px;
+  gap: 0 16px; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.credits-player:last-child { border-bottom: none; }
+
+.cp-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.cp-header {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text);
+  padding: 0; text-align: right;
+}
+.cp-stat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 22px; text-align: right;
+}
+.cp-stat.op   { color: var(--blue); }
+.cp-stat.sm   { color: var(--red); }
+.cp-stat.wins { color: var(--green); }
+.cp-stat.assn { color: var(--assassin); }
+
+.credits-thanks {
+  margin-top: 80px; margin-bottom: 40px; text-align: center;
+}
+.credits-thanks-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 60px; font-weight: 900; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+}
+.credits-thanks-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px; letter-spacing: 0.3em; color: var(--muted);
+  line-height: 2;
+}
+
+.credits-footer {
+  margin-top: 80px; margin-bottom: 120px; text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; letter-spacing: 0.2em;
+  color: rgba(232,230,224,0.2); line-height: 2;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeIn    { from { opacity:0 } to { opacity:1 } }
+@keyframes fadeOut   { from { opacity:1 } to { opacity:0 } }
+@keyframes slideUp   { from { opacity:0; transform:translateY(24px) } to { opacity:1; transform:translateY(0) } }
+@keyframes scaleX    { from { opacity:0; transform:scaleX(0) } to { opacity:1; transform:scaleX(1) } }
+@keyframes cardIn    { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
+</style>
+</head>
+<body>
+<!-- Background music for end credits -->
+<audio id="bgm" loop preload="auto">
+  <source src="MayorOfKingstown.mp3" type="audio/mpeg">
+</audio>
+<!-- Hidden click-to-start button (shows only if autoplay is blocked) -->
+<button id="start-music-btn" onclick="document.getElementById('bgm').play(); this.style.display='none';"
+  style="position:fixed;top:20px;right:20px;z-index:99999;background:rgba(240,192,64,0.2);color:#f0c040;
+  border:1px solid #f0c040;padding:8px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:none;">
+  ▶ Play Music
+</button>
+<script>
+  // Try to autoplay on load; show button if browser blocks it
+  window.addEventListener('load', function() {
+    var bgm = document.getElementById('bgm');
+    bgm.volume = 0.5;
+    var p = bgm.play();
+    if (p && p.catch) {
+      p.catch(function() {
+        document.getElementById('start-music-btn').style.display = 'block';
+      });
+    }
+  });
+</script>
+
+
+<div class="bg-grid"></div>
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!-- ══ PHASE 1: WRAP HEADER ══ -->
+<div id="phase-header">
+  <div class="wrap-eyebrow">End of Stream</div>
+  <div class="wrap-title">That's a Wrap</div>
+  <div class="wrap-subtitle">Thanks for playing Codenames tonight</div>
+  <div class="wrap-divider"></div>
+  <div id="session-summary">
+    <!-- populated by JS -->
+  </div>
+  <div class="wrap-divider" style="margin-top:8px"></div>
+  <div class="timing-grid" id="timing-grid">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- ══ PHASE 2: AWARDS ══ -->
+<div id="phase-awards">
+  <div class="awards-header">🏆 &nbsp; Best of the Night &nbsp; 🏆</div>
+  <div class="awards-grid" id="awards-grid">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- ══ PHASE 3: CREDITS ROLL ══ -->
+<div id="phase-credits">
+  <div id="credits-scroll">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+//  CONFIG — tweak these as needed
+// ─────────────────────────────────────────────────────────
+var MIN_SM_GAMES = 2;   // min SM games to qualify for SM % award
+var MIN_OP_GAMES = 2;   // min OP games to qualify for OP % award
+var MIN_TOTAL_GAMES = 2; // min total games to qualify for wins/played/MVP awards
+var PHASE1_DURATION = 6000;   // ms to show the wrap header
+var PHASE2_DURATION = 14000;  // ms to show the awards screen
+var CREDITS_SPEED   = 80;     // px per second for credits roll
+
+// ─────────────────────────────────────────────────────────
+//  LOAD DATA
+// ─────────────────────────────────────────────────────────
+var playerStats = {};
+var gameState   = { gameNum:1, red:{wins:0,losses:0,assassinHits:0}, blue:{wins:0,losses:0,assassinHits:0}, assassinTotal:0 };
+var timingData  = { turns: [], games: [], sessionStart: null };
+
+try { var _ps = localStorage.getItem('cn_player_stats'); if (_ps) playerStats = JSON.parse(_ps); } catch(e){}
+try { var _gs = localStorage.getItem('cn_state');        if (_gs) { var _p = JSON.parse(_gs); if(_p.gameNum) gameState = _p; } } catch(e){}
+try { var _td = localStorage.getItem('cn_timing');       if (_td) timingData = JSON.parse(_td); } catch(e){}
+
+// ── Timing helpers ──
+function avgSec(arr) { return arr.length ? Math.round(arr.reduce(function(a,b){return a+b;},0) / arr.length) : null; }
+function minSec(arr) { return arr.length ? Math.min.apply(null, arr) : null; }
+function maxSec(arr) { return arr.length ? Math.max.apply(null, arr) : null; }
+function fmtTime(s) {
+  if (s == null) return '—';
+  if (s < 60)   return s + 's';
+  var m = Math.floor(s/60), sec = s % 60;
+  return m + 'm ' + String(sec).padStart(2,'0') + 's';
+}
+function fmtMins(ms) {
+  if (!ms) return '—';
+  var total = Math.round(ms / 60000);
+  if (total < 60) return total + ' min';
+  return Math.floor(total/60) + 'h ' + (total%60) + 'm';
+}
+
+var blueTurns = timingData.turns.filter(function(t){return t.team==='blue';}).map(function(t){return t.seconds;});
+var redTurns  = timingData.turns.filter(function(t){return t.team==='red'; }).map(function(t){return t.seconds;});
+var allTurns  = timingData.turns.map(function(t){return t.seconds;});
+var gameTimes = timingData.games.map(function(g){return g.seconds;});
+var sessionMs = timingData.sessionStart ? Date.now() - timingData.sessionStart : null;
+
+// ─────────────────────────────────────────────────────────
+//  STAT HELPERS
+// ─────────────────────────────────────────────────────────
+function pct(wins, games) {
+  if (!games) return null;
+  return Math.round((wins / games) * 100);
+}
+function fmt(n) { return n == null ? '—' : n; }
+function fmtPct(n) { return n == null ? '—' : n + '%'; }
+
+var players = Object.keys(playerStats).filter(function(n) {
+  var s = playerStats[n];
+  return s && (s.opGames + s.smGames) > 0;
+});
+
+function best(filterFn, scoreFn) {
+  var eligible = players.filter(filterFn);
+  if (!eligible.length) return null;
+  eligible.sort(function(a,b) { return scoreFn(playerStats[b]) - scoreFn(playerStats[a]); });
+  var topScore = scoreFn(playerStats[eligible[0]]);
+  var tied = eligible.filter(function(n) { return scoreFn(playerStats[n]) === topScore; });
+  return { name: eligible[0], all: tied, score: topScore };
+}
+
+// ── Compute awards ──
+var awards = [];
+
+// 🎯 Sharpest Spymaster — best SM win %
+var smAward = best(
+  function(n) { return playerStats[n].smGames >= MIN_SM_GAMES; },
+  function(s) { return pct(s.smWins, s.smGames); }
+);
+awards.push({
+  icon:'🎯', title:'Sharpest Spymaster', color:'red',
+  winner: smAward ? smAward.name : null,
+  tied:   smAward && smAward.all.length > 1 ? smAward.all : null,
+  stat:   smAward ? fmtPct(pct(playerStats[smAward.name].smWins, playerStats[smAward.name].smGames)) + '  (' + playerStats[smAward.name].smWins + 'W / ' + playerStats[smAward.name].smGames + ' games)' : null
+});
+
+// 🕵️ Top Operative — best OP win %
+var opAward = best(
+  function(n) { return playerStats[n].opGames >= MIN_OP_GAMES; },
+  function(s) { return pct(s.opWins, s.opGames); }
+);
+awards.push({
+  icon:'🕵️', title:'Top Operative', color:'blue',
+  winner: opAward ? opAward.name : null,
+  tied:   opAward && opAward.all.length > 1 ? opAward.all : null,
+  stat:   opAward ? fmtPct(pct(playerStats[opAward.name].opWins, playerStats[opAward.name].opGames)) + '  (' + playerStats[opAward.name].opWins + 'W / ' + playerStats[opAward.name].opGames + ' games)' : null
+});
+
+// 👑 Most Games Won
+var winsAward = best(
+  function(n) { var s = playerStats[n]; return (s.opGames||0) + (s.smGames||0) >= MIN_TOTAL_GAMES; },
+  function(s) { return (s.opWins || 0) + (s.smWins || 0); }
+);
+awards.push({
+  icon:'👑', title:'Most Games Won', color:'gold',
+  winner: winsAward ? winsAward.name : null,
+  tied:   winsAward && winsAward.all.length > 1 ? winsAward.all : null,
+  stat:   winsAward ? winsAward.score + ' total wins' : null
+});
+
+// 🎮 Most Games Played
+var gamesAward = best(
+  function(n) { var s = playerStats[n]; return (s.opGames||0) + (s.smGames||0) >= MIN_TOTAL_GAMES; },
+  function(s) { return (s.opGames || 0) + (s.smGames || 0); }
+);
+awards.push({
+  icon:'🎮', title:'Most Games Played', color:'blue',
+  winner: gamesAward ? gamesAward.name : null,
+  tied:   gamesAward && gamesAward.all.length > 1 ? gamesAward.all : null,
+  stat:   gamesAward ? gamesAward.score + ' games' : null
+});
+
+// 💀 Assassin Magnet — most assassin hits
+var assnAward = best(
+  function(n) { return (playerStats[n].assassinHits || 0) > 0; },
+  function(s) { return s.assassinHits || 0; }
+);
+awards.push({
+  icon:'💀', title:'Assassin Magnet', color:'assassin',
+  winner: assnAward ? assnAward.name : null,
+  tied:   assnAward && assnAward.all.length > 1 ? assnAward.all : null,
+  stat:   assnAward ? assnAward.score + ' assassin hit' + (assnAward.score !== 1 ? 's' : '') : null
+});
+
+// 🏆 MVP — weighted formula: op% * 0.3 + sm% * 0.35 + wins * 2 + games * 0.5
+var mvpAward = best(
+  function(n) { var s = playerStats[n]; return (s.opGames + s.smGames) >= MIN_TOTAL_GAMES; },
+  function(s) {
+    var op    = pct(s.opWins, s.opGames) || 0;
+    var sm    = pct(s.smWins, s.smGames) || 0;
+    var wins  = (s.opWins || 0) + (s.smWins || 0);
+    var games = (s.opGames || 0) + (s.smGames || 0);
+    return op * 0.3 + sm * 0.35 + wins * 2 + games * 0.5;
+  }
+);
+
+// ─────────────────────────────────────────────────────────
+//  PHASE 1: WRAP HEADER
+// ─────────────────────────────────────────────────────────
+function buildSessionSummary() {
+  var totalGames    = gameState.gameNum - 1 || (gameState.red.wins + gameState.red.losses) || 0;
+  var totalAssassins= gameState.assassinTotal || 0;
+  var blueWins      = (gameState.blue && gameState.blue.wins) || 0;
+  var redWins       = (gameState.red  && gameState.red.wins)  || 0;
+  var container     = document.getElementById('session-summary');
+
+  var items = [
+    { num: totalGames,     label: 'Games Played' },
+    { num: blueWins,       label: 'Blue Wins',   color: 'var(--blue)' },
+    { num: redWins,        label: 'Red Wins',    color: 'var(--red)' },
+    { num: totalAssassins, label: '☠ Assassins', color: 'var(--assassin)' },
+  ];
+
+  items.forEach(function(item, i) {
+    if (i > 0) {
+      var div = document.createElement('div');
+      div.className = 'sess-divider'; container.appendChild(div);
+    }
+    var block = document.createElement('div'); block.className = 'sess-stat';
+    var numEl = document.createElement('div'); numEl.className = 'sess-num'; numEl.textContent = item.num;
+    if (item.color) numEl.style.color = item.color;
+    var lbl = document.createElement('div'); lbl.className = 'sess-label'; lbl.textContent = item.label;
+    block.appendChild(numEl); block.appendChild(lbl);
+    container.appendChild(block);
+  });
+
+  // ── Timing stats grid ──
+  var timingGrid = document.getElementById('timing-grid');
+  if (!timingGrid) return;
+
+  var stats = [
+    { label: 'Avg Blue Turn',    val: fmtTime(avgSec(blueTurns)), color: 'var(--blue)' },
+    { label: 'Avg Red Turn',     val: fmtTime(avgSec(redTurns)),  color: 'var(--red)' },
+    { label: 'Quickest Turn',    val: fmtTime(minSec(allTurns)),  color: 'var(--green)' },
+    { label: 'Longest Turn',     val: fmtTime(maxSec(allTurns)),  color: 'var(--gold)' },
+    { label: 'Quickest Game',    val: fmtTime(minSec(gameTimes)), color: 'var(--green)' },
+    { label: 'Longest Game',     val: fmtTime(maxSec(gameTimes)), color: 'var(--gold)' },
+    { label: 'Avg Game Time',    val: fmtTime(avgSec(gameTimes)), color: 'var(--text)' },
+    { label: 'Total Streamed',   val: fmtMins(sessionMs),         color: 'var(--gold)' },
+  ];
+
+  stats.forEach(function(s) {
+    var cell = document.createElement('div'); cell.className = 'timing-cell';
+    var val  = document.createElement('div'); val.className  = 'timing-val'; val.textContent = s.val; val.style.color = s.color;
+    var lbl  = document.createElement('div'); lbl.className  = 'timing-lbl'; lbl.textContent = s.label;
+    cell.appendChild(val); cell.appendChild(lbl);
+    timingGrid.appendChild(cell);
+  });
+}
+buildSessionSummary();
+
+// ─────────────────────────────────────────────────────────
+//  PHASE 2: AWARDS
+// ─────────────────────────────────────────────────────────
+function buildAwards() {
+  var grid = document.getElementById('awards-grid');
+  awards.forEach(function(a) {
+    var card = document.createElement('div');
+    card.className = 'award-card ' + a.color;
+    var icon  = document.createElement('span'); icon.className = 'award-icon'; icon.textContent = a.icon;
+    var title = document.createElement('div');  title.className = 'award-title'; title.textContent = a.title;
+    var winner = document.createElement('div'); winner.className = 'award-winner';
+
+    if (a.winner) {
+      winner.textContent = a.winner;
+      if (a.winner.length > 12) winner.style.fontSize = '28px';
+    } else {
+      winner.textContent = 'No Data';
+      winner.classList.add('no-data');
+    }
+
+    card.appendChild(icon); card.appendChild(title); card.appendChild(winner);
+
+    if (a.stat) {
+      var stat = document.createElement('div'); stat.className = 'award-stat'; stat.textContent = a.stat;
+      card.appendChild(stat);
+    }
+    if (a.tied && a.tied.length > 1) {
+      var tie = document.createElement('div'); tie.className = 'award-tie';
+      tie.textContent = 'Tied with: ' + a.tied.slice(1).join(', ');
+      card.appendChild(tie);
+    }
+    grid.appendChild(card);
+  });
+
+  // MVP card full-width
+  var mvpCard = document.createElement('div');
+  mvpCard.className = 'award-card gold mvp-card';
+  var mvpIcon = document.createElement('div'); mvpIcon.className = 'award-icon'; mvpIcon.textContent = '🏆';
+  var mvpInfo = document.createElement('div'); mvpInfo.className = 'award-info';
+  var mvpTitle = document.createElement('div'); mvpTitle.className = 'award-title'; mvpTitle.textContent = 'MVP of the Night';
+  var mvpWinner = document.createElement('div'); mvpWinner.className = 'award-winner';
+  if (mvpAward) {
+    mvpWinner.textContent = mvpAward.name;
+    if (mvpAward.name.length > 14) mvpWinner.style.fontSize = '42px';
+    var s = playerStats[mvpAward.name];
+    var mvpStat = document.createElement('div'); mvpStat.className = 'award-stat';
+    mvpStat.textContent =
+      'OP ' + fmtPct(pct(s.opWins, s.opGames)) + '   ·   SM ' + fmtPct(pct(s.smWins, s.smGames)) +
+      '   ·   ' + ((s.opWins||0)+(s.smWins||0)) + ' total wins';
+    mvpInfo.appendChild(mvpTitle); mvpInfo.appendChild(mvpWinner); mvpInfo.appendChild(mvpStat);
+  } else {
+    mvpWinner.textContent = 'No Data'; mvpWinner.classList.add('no-data');
+    mvpInfo.appendChild(mvpTitle); mvpInfo.appendChild(mvpWinner);
+  }
+  mvpCard.appendChild(mvpIcon); mvpCard.appendChild(mvpInfo);
+  grid.appendChild(mvpCard);
+}
+buildAwards();
+
+// ─────────────────────────────────────────────────────────
+//  PHASE 3: CREDITS ROLL
+// ─────────────────────────────────────────────────────────
+function buildCredits() {
+  var scroll = document.getElementById('credits-scroll');
+
+  // Logo
+  var logo = document.createElement('div'); logo.className = 'credits-logo'; logo.textContent = 'Codenames';
+  var logoSub = document.createElement('div'); logoSub.className = 'credits-logo-sub'; logoSub.textContent = 'Stream Session Complete';
+  scroll.appendChild(logo); scroll.appendChild(logoSub);
+
+  // Player stat table
+  var secTitle = document.createElement('div'); secTitle.className = 'credits-section-title'; secTitle.textContent = '— Player Stats —';
+  scroll.appendChild(secTitle);
+
+  // Header row
+  var header = document.createElement('div'); header.className = 'credits-player';
+  ['', 'OP Win %', 'SM Win %', 'Total Wins', 'Assassins'].forEach(function(t, i) {
+    var el = document.createElement('div'); el.className = 'cp-header'; el.textContent = t;
+    header.appendChild(el);
+  });
+  scroll.appendChild(header);
+
+  var div0 = document.createElement('div'); div0.className = 'credits-divider'; scroll.appendChild(div0);
+
+  // Sort players by total games desc
+  var sorted = players.slice().sort(function(a,b) {
+    var ag = (playerStats[a].opGames||0) + (playerStats[a].smGames||0);
+    var bg = (playerStats[b].opGames||0) + (playerStats[b].smGames||0);
+    return bg - ag;
+  });
+
+  if (sorted.length === 0) {
+    var noP = document.createElement('div');
+    noP.style.cssText = 'text-align:center;color:var(--muted);font-family:Share Tech Mono,monospace;font-size:14px;padding:40px 0';
+    noP.textContent = 'No player stats recorded this session.';
+    scroll.appendChild(noP);
+  } else {
+    sorted.forEach(function(name) {
+      var s = playerStats[name];
+      var row = document.createElement('div'); row.className = 'credits-player';
+      var nameEl = document.createElement('div'); nameEl.className = 'cp-name'; nameEl.textContent = name;
+      var opEl   = document.createElement('div'); opEl.className   = 'cp-stat op';   opEl.textContent   = fmtPct(pct(s.opWins, s.opGames));
+      var smEl   = document.createElement('div'); smEl.className   = 'cp-stat sm';   smEl.textContent   = fmtPct(pct(s.smWins, s.smGames));
+      var wEl    = document.createElement('div'); wEl.className    = 'cp-stat wins'; wEl.textContent    = (s.opWins||0) + (s.smWins||0);
+      var aEl    = document.createElement('div'); aEl.className    = 'cp-stat assn'; aEl.textContent    = s.assassinHits || 0;
+      [nameEl, opEl, smEl, wEl, aEl].forEach(function(el) { row.appendChild(el); });
+      scroll.appendChild(row);
+    });
+  }
+
+  // Timing stats section
+  var div2 = document.createElement('div'); div2.className = 'credits-divider'; scroll.appendChild(div2);
+  var timeSec = document.createElement('div'); timeSec.className = 'credits-section-title'; timeSec.textContent = '— Session Timing —';
+  scroll.appendChild(timeSec);
+
+  var timingStats = [
+    ['Avg Blue Turn',  fmtTime(avgSec(blueTurns)), 'var(--blue)'],
+    ['Avg Red Turn',   fmtTime(avgSec(redTurns)),  'var(--red)'],
+    ['Quickest Turn',  fmtTime(minSec(allTurns)),  'var(--green)'],
+    ['Longest Turn',   fmtTime(maxSec(allTurns)),  'var(--gold)'],
+    ['Quickest Game',  fmtTime(minSec(gameTimes)), 'var(--green)'],
+    ['Longest Game',   fmtTime(maxSec(gameTimes)), 'var(--gold)'],
+    ['Avg Game Time',  fmtTime(avgSec(gameTimes)), 'var(--text)'],
+    ['Total Streamed', fmtMins(sessionMs),          'var(--gold)'],
+  ];
+
+  timingStats.forEach(function(row) {
+    var line = document.createElement('div');
+    line.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);width:100%';
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:Barlow Condensed,sans-serif;font-size:22px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)';
+    lbl.textContent = row[0];
+    var val = document.createElement('div');
+    val.style.cssText = 'font-family:Share Tech Mono,monospace;font-size:22px;color:' + row[2];
+    val.textContent = row[1];
+    line.appendChild(lbl); line.appendChild(val);
+    scroll.appendChild(line);
+  });
+  var thanks = document.createElement('div'); thanks.className = 'credits-thanks';
+  var thanksTitle = document.createElement('div'); thanksTitle.className = 'credits-thanks-title'; thanksTitle.textContent = 'Thanks for Watching!';
+  var thanksSub = document.createElement('div'); thanksSub.className = 'credits-thanks-sub';
+  thanksSub.innerHTML = 'Follow for more Codenames streams<br>Come back next time — maybe bring better clues 😏';
+  thanks.appendChild(thanksTitle); thanks.appendChild(thanksSub);
+  scroll.appendChild(thanks);
+
+  // Footer
+  var footer = document.createElement('div'); footer.className = 'credits-footer';
+  footer.innerHTML = 'CODENAMES OVERLAY v4  ·  Powered by localStorage<br>All stats are tracked automatically · See you next stream';
+  scroll.appendChild(footer);
+}
+buildCredits();
+
+// ─────────────────────────────────────────────────────────
+//  SEQUENCER
+// ─────────────────────────────────────────────────────────
+function transitionTo(fromId, toId, callback) {
+  var from = document.getElementById(fromId);
+  var to   = document.getElementById(toId);
+  from.style.animation = 'fadeOut 0.7s ease forwards';
+  window.setTimeout(function() {
+    from.style.opacity = '0';
+    from.style.pointerEvents = 'none';
+    to.style.opacity = '1';
+    to.style.pointerEvents = 'all';
+    if (callback) callback();
+  }, 700);
+}
+
+function animateAwardCards() {
+  var cards = document.querySelectorAll('.award-card');
+  cards.forEach(function(card, i) {
+    window.setTimeout(function() {
+      card.style.animation = 'cardIn 0.5s ease forwards';
+    }, i * 180);
+  });
+}
+
+function startCreditsScroll() {
+  var scrollEl = document.getElementById('credits-scroll');
+  var totalH   = scrollEl.offsetHeight;
+  var distance = 1080 + totalH;
+  var duration = (distance / CREDITS_SPEED) * 1000;
+  scrollEl.style.transition = 'top ' + duration + 'ms linear';
+  scrollEl.style.top = '-' + totalH + 'px';
+
+  // After credits finish, fade back to phase 1 and restart
+  window.setTimeout(function() {
+    restartSequence();
+  }, duration + 1000);
+}
+
+function restartSequence() {
+  // Reset all phases
+  ['phase-header','phase-awards','phase-credits'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.style.animation = '';
+    el.style.opacity   = '0';
+    el.style.pointerEvents = 'none';
+  });
+  document.querySelectorAll('.award-card').forEach(function(c) { c.style.animation = ''; c.style.opacity = '0'; });
+  var scrollEl = document.getElementById('credits-scroll');
+  scrollEl.style.transition = 'none';
+  scrollEl.style.top = '1080px';
+  window.setTimeout(function() { runSequence(); }, 100);
+}
+
+function runSequence() {
+  // Phase 1
+  var ph = document.getElementById('phase-header');
+  ph.style.opacity = '0'; ph.style.pointerEvents = 'all';
+  ph.style.animation = 'fadeIn 0.8s 0.3s ease forwards';
+
+  window.setTimeout(function() {
+    // Phase 2
+    transitionTo('phase-header', 'phase-awards', function() {
+      animateAwardCards();
+    });
+
+    window.setTimeout(function() {
+      // Phase 3
+      transitionTo('phase-awards', 'phase-credits', function() {
+        window.setTimeout(startCreditsScroll, 300);
+      });
+    }, PHASE2_DURATION);
+
+  }, PHASE1_DURATION);
+}
+
+// Kick it off
+window.addEventListener('load', function() {
+  window.setTimeout(runSequence, 200);
+});
+</script>
+</body>
+</html>

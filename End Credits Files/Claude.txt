@@ -1,0 +1,27 @@
+I need help with my streaming and codenames.game setup. Claude has been helping me, however the html we created is getting too large, causing me to be unable to share it back and forth because it eats up mu claud1e pro limits. Essentially I have the following files, and their purpose:
+
+
+
+
+
+codenames-combined.html (563kb) - A codenames.game Twitch/OBS overlay tatg pulls info from the next file for stats tracking
+
+
+
+Start-Bot.bat (1kb) - a bot that gets placed inside the codenames.game/r/lobby to track turns/wins/losses etc. it is also dependent on the next 2 files. 
+
+
+
+bot.js (48kb) - the javascript config file
+
+
+
+control.html (22kb) - The file that gets opened by start.bot.bat for entering game room information
+
+
+
+codenames-endcreditsv5.0 (35kb)
+
+
+
+All of these files work hand in hand. Claude was working on changing #1 from writing a story using game data to 
