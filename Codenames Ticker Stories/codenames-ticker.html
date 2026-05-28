@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codenames Recap Ticker</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═══════════════════════════════════════════════════════════ */
+/* // EDIT: COLOR PALETTE — matches your Codenames overlay //   */
+/* ═══════════════════════════════════════════════════════════ */
+:root {
+  --blue:   #2a7de8;
+  --blue-glow: rgba(42,125,232,0.55);
+  --red:    #e8392a;
+  --red-glow: rgba(232,57,42,0.55);
+  --gold:   #f0c040;
+  --gold-glow: rgba(240,192,64,0.5);
+  --green:  #2adf80;
+  --text:   #f2f5fa;
+  --muted:  rgba(242,245,250,0.6);
+}
+
+html, body {
+  background: transparent;   /* transparent — just the text, no bar */
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* // EDIT: TICKER CONTAINER — height controls text size band // */
+/* ═══════════════════════════════════════════════════════════ */
+#ticker-wrap {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* strong text shadow so it reads over ANY background since bar is transparent */
+}
+
+#ticker-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  /* animation applied via JS so we can set duration based on content width */
+}
+
+/* Each segment of the crawl */
+.tick-item {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  padding: 0 40px;
+  text-shadow:
+    0 0 4px #000,
+    0 2px 6px rgba(0,0,0,0.9),
+    0 0 14px rgba(0,0,0,0.7);
+}
+
+/* Highlighted code words pulled from the board */
+.tick-word {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 0.92em;
+  letter-spacing: 0.04em;
+  margin: 0 2px;
+  text-shadow: 0 0 8px currentColor, 0 2px 6px rgba(0,0,0,0.9);
+}
+.tick-word.blue { color: #6fb4ff; }
+.tick-word.red  { color: #ff8a7a; }
+.tick-word.gold { color: var(--gold); }
+
+/* Player names */
+.tick-name {
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 6px var(--gold-glow), 0 2px 6px rgba(0,0,0,0.9);
+}
+
+/* The "BREAKING" / label badge */
+.tick-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 0.18em;
+  padding: 4px 16px;
+  margin: 0 14px 0 40px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0,0,0,0.8);
+}
+.tick-badge.blue  { background: var(--blue);  color: #fff; box-shadow: 0 0 14px var(--blue-glow); }
+.tick-badge.red   { background: var(--red);   color: #fff; box-shadow: 0 0 14px var(--red-glow); }
+.tick-badge.gold  { background: var(--gold);  color: #1a1a1a; box-shadow: 0 0 14px var(--gold-glow); }
+.tick-badge.recap { background: #111; color: var(--gold); border: 1px solid var(--gold); box-shadow: 0 0 12px var(--gold-glow); }
+
+/* Separator bullet between segments */
+.tick-sep {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin: 0 30px;
+  box-shadow: 0 0 10px var(--gold-glow);
+  flex-shrink: 0;
+}
+
+@keyframes scrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }  /* track is duplicated, so -50% = seamless loop */
+}
+</style>
+</head>
+<body>
+
+<div id="ticker-wrap">
+  <div id="ticker-track"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// // EDIT: SCROLL SPEED — pixels per second (lower = slower) //
+// ═══════════════════════════════════════════════════════════
+var SCROLL_PX_PER_SEC = 90;
+
+// ═══════════════════════════════════════════════════════════
+// DATA — pulled live from bot WebSocket + localStorage
+// ═══════════════════════════════════════════════════════════
+var gameStories = [];   // [{ gameNum, winner, story }]
+var liveStats   = null; // { blue:{wins,losses}, red:{wins,losses}, ... } from cn_state
+var playerStats = {};   // career stats from cn_player_stats
+
+try { var _st = localStorage.getItem('cn_game_stories'); if (_st) gameStories = JSON.parse(_st); } catch(e){}
+try { var _gs = localStorage.getItem('cn_state');        if (_gs) liveStats = JSON.parse(_gs); } catch(e){}
+try { var _ps = localStorage.getItem('cn_player_stats'); if (_ps) playerStats = JSON.parse(_ps); } catch(e){}
+
+// ═══════════════════════════════════════════════════════════
+// // EDIT: STATIC FUN-FACT BLURBS — rotate alongside the recap //
+// Add/remove freely. {dynamic} tokens are filled in at runtime. //
+// ═══════════════════════════════════════════════════════════
+function buildStatBlurbs() {
+  var blurbs = [];
+
+  // Scoreboard blurb (if we have live state)
+  if (liveStats && liveStats.blue && liveStats.red) {
+    blurbs.push({
+      badge: 'SCORE', badgeClass: 'gold',
+      html: 'BLUE <b class="tick-word blue">' + (liveStats.blue.wins||0) + 'W</b> ' +
+            '<span class="tick-name">vs</span> ' +
+            'RED <b class="tick-word red">' + (liveStats.red.wins||0) + 'W</b>'
+    });
+  }
+
+  // Assassin count blurb
+  if (liveStats && typeof liveStats.assassinTotal === 'number' && liveStats.assassinTotal > 0) {
+    blurbs.push({
+      badge: 'DANGER', badgeClass: 'red',
+      html: '<b class="tick-word red">' + liveStats.assassinTotal + '</b> assassin' +
+            (liveStats.assassinTotal === 1 ? '' : 's') + ' contacted tonight \u2014 RIP'
+    });
+  }
+
+  // Career leader blurb (most SM wins)
+  var leader = null, leaderWins = 0;
+  Object.keys(playerStats).forEach(function(name) {
+    var w = (playerStats[name] && playerStats[name].smWins) || 0;
+    if (w > leaderWins) { leaderWins = w; leader = name; }
+  });
+  if (leader && leaderWins > 0) {
+    blurbs.push({
+      badge: 'TOP DOG', badgeClass: 'gold',
+      html: '<span class="tick-name">' + leader + '</span> leads all spymasters with ' +
+            '<b class="tick-word gold">' + leaderWins + '</b> career win' + (leaderWins===1?'':'s')
+    });
+  }
+
+  // ── EDIT: add your own evergreen blurbs here ──
+  blurbs.push({ badge: 'SYNDICATE', badgeClass: 'blue',
+    html: 'Join the Voice Channel \u2014 hop in and play with us!' });
+  blurbs.push({ badge: 'FOLLOW', badgeClass: 'gold',
+    html: 'Enjoying the chaos? Drop a follow and stick around' });
+
+  return blurbs;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Render the recap story with highlighted words/names
+// ═══════════════════════════════════════════════════════════
+function buildRecapHtml(entry) {
+  // Plain story text; we lightly bold ALL-CAPS words (likely code words)
+  // and leave it readable. Keeps it simple + safe.
+  var safe = entry.story
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Highlight ALL-CAPS words of length >= 3 as code words
+  var wordClass = entry.winner === 'blue' ? 'blue' : 'red';
+  safe = safe.replace(/\b([A-Z][A-Z]{2,})\b/g, function(m) {
+    return '<b class="tick-word ' + wordClass + '">' + m + '</b>';
+  });
+  return safe;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Compose the full ticker content (recap + blurbs interleaved)
+// ═══════════════════════════════════════════════════════════
+function composeSegments() {
+  var segments = [];
+
+  // Latest recap first (most recent game)
+  if (gameStories.length > 0) {
+    var latest = gameStories[gameStories.length - 1];
+    segments.push({
+      badge: 'GAME ' + (latest.gameNum || '') + ' RECAP',
+      badgeClass: 'recap',
+      html: buildRecapHtml(latest)
+    });
+  }
+
+  // Then the rotating stat blurbs
+  var blurbs = buildStatBlurbs();
+  blurbs.forEach(function(b) { segments.push(b); });
+
+  // Older recaps after the blurbs (so the latest gets prime position)
+  if (gameStories.length > 1) {
+    for (var i = gameStories.length - 2; i >= 0; i--) {
+      var e = gameStories[i];
+      segments.push({
+        badge: 'GAME ' + (e.gameNum || '') + ' RECAP',
+        badgeClass: 'recap',
+        html: buildRecapHtml(e)
+      });
+    }
+  }
+
+  // Fallback if nothing yet
+  if (segments.length === 0) {
+    segments.push({
+      badge: 'STANDBY', badgeClass: 'gold',
+      html: 'Game recaps will appear here once the first match wraps up\u2026'
+    });
+  }
+
+  return segments;
+}
+
+// Build the DOM for one pass of all segments
+function buildPassHtml(segments) {
+  var html = '';
+  segments.forEach(function(seg) {
+    html += '<span class="tick-item">';
+    if (seg.badge) {
+      html += '<span class="tick-badge ' + (seg.badgeClass||'gold') + '">' + seg.badge + '</span>';
+    }
+    html += seg.html;
+    html += '</span>';
+    html += '<span class="tick-sep"></span>';
+  });
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Render + animate the ticker (duplicated content = seamless loop)
+// ═══════════════════════════════════════════════════════════
+function renderTicker() {
+  var track = document.getElementById('ticker-track');
+  var segments = composeSegments();
+  var pass = buildPassHtml(segments);
+
+  // Duplicate the content so the -50% keyframe loops seamlessly
+  track.innerHTML = pass + pass;
+
+  // Measure one pass width to set duration for constant speed
+  // (after innerHTML set, measure half the scrollWidth = one pass)
+  requestAnimationFrame(function() {
+    var onePassWidth = track.scrollWidth / 2;
+    var duration = onePassWidth / SCROLL_PX_PER_SEC; // seconds
+    track.style.animation = 'none';
+    // force reflow
+    void track.offsetWidth;
+    track.style.animation = 'scrollLeft ' + duration + 's linear infinite';
+  });
+}
+
+renderTicker();
+
+// ═══════════════════════════════════════════════════════════
+// BOT BRIDGE — live story + state updates via WebSocket
+// ═══════════════════════════════════════════════════════════
+(function() {
+  var ws = null, reconnectTimer = null;
+
+  function connect() {
+    try {
+      ws = new WebSocket('ws://localhost:7842/overlay');
+      ws.onopen = function() {
+        if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
+      };
+      ws.onmessage = function(evt) {
+        try {
+          var msg = JSON.parse(evt.data);
+          var changed = false;
+
+          if (msg.type === 'gameStory') {
+            if (msg.allStories && msg.allStories.length) {
+              gameStories = msg.allStories;
+            } else if (msg.story) {
+              gameStories.push({ gameNum: msg.gameNum, winner: msg.winner, story: msg.story });
+            }
+            try { localStorage.setItem('cn_game_stories', JSON.stringify(gameStories)); } catch(e){}
+            changed = true;
+          }
+
+          // Live score/state updates keep the SCORE blurb fresh
+          if (msg.type === 'state' || msg.type === 'fullState') {
+            try { var s = localStorage.getItem('cn_state'); if (s) liveStats = JSON.parse(s); } catch(e){}
+            try { var p = localStorage.getItem('cn_player_stats'); if (p) playerStats = JSON.parse(p); } catch(e){}
+          }
+          if (msg.type === 'gameEnd') { changed = true; }
+
+          if (changed) {
+            // refresh local caches then rebuild
+            try { var s2 = localStorage.getItem('cn_state'); if (s2) liveStats = JSON.parse(s2); } catch(e){}
+            try { var p2 = localStorage.getItem('cn_player_stats'); if (p2) playerStats = JSON.parse(p2); } catch(e){}
+            renderTicker();
+          }
+        } catch(e) {}
+      };
+      ws.onclose = function() { scheduleReconnect(); };
+      ws.onerror = function() {};
+    } catch(e) { scheduleReconnect(); }
+  }
+  function scheduleReconnect() {
+    if (reconnectTimer) return;
+    reconnectTimer = setTimeout(function() { reconnectTimer = null; connect(); }, 3000);
+  }
+  connect();
+})();
+
+// Periodic refresh of stat blurbs (in case localStorage changed without a WS event)
+setInterval(function() {
+  try { var s = localStorage.getItem('cn_state'); if (s) liveStats = JSON.parse(s); } catch(e){}
+  try { var p = localStorage.getItem('cn_player_stats'); if (p) playerStats = JSON.parse(p); } catch(e){}
+  // Only re-render if not mid-scroll-critical; cheap enough to just do it
+  renderTicker();
+}, 60000); // every 60s
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord VC</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:     #2a7de8;
+    --blue-dim: #153a7a;
+    --blue-bg:  rgba(42,125,232,0.08);
+    --text:     #e8e6e0;
+    --muted:    rgba(232,230,224,0.45);
+    --border:   rgba(255,255,255,0.07);
+    --bg:       #000000;
+  }
+
+  html, body {
+    width: 763px;
+    height: 368px;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: 'Barlow Condensed', sans-serif;
+    color: var(--text);
+  }
+
+  .panel {
+    width: 763px;
+    height: 368px;
+    background: #000000;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Top blue accent line ── */
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--blue);
+    box-shadow: 0 0 12px rgba(42,125,232,0.6);
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .header-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 8px rgba(42,125,232,0.8);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(42,125,232,0.8); }
+    50%       { opacity: 0.5; box-shadow: 0 0 3px rgba(42,125,232,0.3); }
+  }
+
+  /* ── User list ── */
+  .user-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: none;
+  }
+  .user-list::-webkit-scrollbar { display: none; }
+
+  .user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    transition: background 0.15s;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .user-row:last-child { border-bottom: none; }
+  .user-row:hover { background: var(--blue-bg); }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--blue-dim);
+    border: 1.5px solid var(--blue-dim);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .avatar-initial {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+  }
+
+  /* speaking ring */
+  .avatar.speaking {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(42,125,232,0.4);
+  }
+  .avatar.speaking::after {
+    content: '';
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(42,125,232,0.3);
+    animation: speakRing 1.2s ease-out infinite;
+  }
+  @keyframes speakRing {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+
+  .user-info { flex: 1; min-width: 0; }
+  .user-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 500;
+    color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    letter-spacing: 0.03em;
+  }
+  .user-status {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 400;
+    color: var(--muted); letter-spacing: 0.05em;
+    margin-top: 1px;
+  }
+  .user-status.speaking-text { color: var(--blue); }
+
+  .mic-icon {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.4;
+  }
+  .mic-icon.active { opacity: 1; }
+  .mic-icon svg { width: 16px; height: 16px; }
+
+  /* ── Empty state ── */
+  .empty-state {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 32px; opacity: 0.3; }
+  .empty-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; letter-spacing: 0.15em;
+    text-transform: uppercase; opacity: 0.5;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 8px 16px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .footer-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px; font-weight: 400;
+    color: rgba(42,125,232,0.4);
+    letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .member-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; color: var(--muted); letter-spacing: 0.1em;
+  }
+  #count-num { color: var(--blue); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="header">
+    <span class="header-title">Discord VC</span>
+    <div class="header-dot"></div>
+  </div>
+
+  <div class="user-list" id="user-list">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">🎙️</div>
+      <div class="empty-text">No one in voice chat</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-label">Live Voice Channel</span>
+    <span class="member-count"><span id="count-num">0</span> members</span>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// EDIT THIS LIST to match who's in your Discord VC
+// Set speaking: true for whoever is currently talking
+// ─────────────────────────────────────────────────────────
+var vcMembers = [
+  // { name: "SixTen",    avatar: "",  speaking: true,  muted: false },
+  // { name: "Eggstra",   avatar: "",  speaking: false, muted: false },
+  // { name: "DysenBC",   avatar: "",  speaking: false, muted: true  },
+];
+
+// ─────────────────────────────────────────────────────────
+// Mic SVGs
+// ─────────────────────────────────────────────────────────
+function micSVG(muted) {
+  if (!muted) return `<svg viewBox="0 0 24 24" fill="none" stroke="#2a7de8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,230,224,0.25)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`;
+}
+
+function getInitial(name) { return name ? name.charAt(0).toUpperCase() : '?'; }
+
+function render() {
+  var list  = document.getElementById('user-list');
+  var empty = document.getElementById('empty-state');
+  var count = document.getElementById('count-num');
+
+  count.textContent = vcMembers.length;
+
+  // Clear existing rows (keep empty state node)
+  var rows = list.querySelectorAll('.user-row');
+  rows.forEach(function(r) { r.remove(); });
+
+  if (vcMembers.length === 0) {
+    empty.style.display = 'flex';
+    return;
+  }
+  empty.style.display = 'none';
+
+  vcMembers.forEach(function(m) {
+    var row = document.createElement('div');
+    row.className = 'user-row';
+
+    // Avatar
+    var av = document.createElement('div');
+    av.className = 'avatar' + (m.speaking ? ' speaking' : '');
+    if (m.avatar) {
+      var img = document.createElement('img');
+      img.src = m.avatar; img.alt = m.name;
+      av.appendChild(img);
+    } else {
+      var ini = document.createElement('span');
+      ini.className = 'avatar-initial';
+      ini.textContent = getInitial(m.name);
+      av.appendChild(ini);
+    }
+
+    // Info
+    var info = document.createElement('div'); info.className = 'user-info';
+    var name = document.createElement('div'); name.className = 'user-name'; name.textContent = m.name;
+    var status = document.createElement('div');
+    status.className = 'user-status' + (m.speaking ? ' speaking-text' : '');
+    status.textContent = m.speaking ? 'Speaking...' : (m.muted ? 'Muted' : 'Connected');
+
+    info.appendChild(name); info.appendChild(status);
+
+    // Mic icon
+    var mic = document.createElement('div');
+    mic.className = 'mic-icon' + (m.speaking ? ' active' : '');
+    mic.innerHTML = micSVG(m.muted);
+
+    row.appendChild(av); row.appendChild(info); row.appendChild(mic);
+    list.appendChild(row);
+  });
+}
+
+render();
+
+// ─────────────────────────────────────────────────────────
+// To update members live during stream, call:
+// updateVC([{ name:"SixTen", speaking:true, muted:false }, ...])
+// from the browser console in OBS
+// ─────────────────────────────────────────────────────────
+function updateVC(members) { vcMembers = members; render(); }
+</script>
+</body>
+</html>

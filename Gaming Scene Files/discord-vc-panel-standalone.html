@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Discord VC Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:   #2a7de8;
+  --border: #1c1c1c;
+  --muted:  rgba(232,230,224,0.55);
+}
+
+html, body {
+  background: transparent;  /* transparent so you can overlay on any scene */
+  font-family: 'Barlow Condensed', sans-serif;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+
+.discord-vc-panel {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  border-right: 1px solid var(--border);
+  border-bottom: 2px solid var(--blue);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.discord-vc-header {
+  padding: 12px 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.discord-vc-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--blue);
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(42,125,232,0.45);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.discord-vc-status {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.discord-vc-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 6px var(--blue), 0 0 12px rgba(42,125,232,0.5);
+  animation: discord-vc-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes discord-vc-pulse {
+  0%, 100% { opacity: 1.0;  transform: scale(1.0);  }
+  50%      { opacity: 0.35; transform: scale(0.75); }
+}
+
+.discord-vc-content { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="discord-vc-panel">
+    <div class="discord-vc-header">
+      <div class="discord-vc-title">Discord<br>VC</div>
+      <div class="discord-vc-status">
+        <span class="discord-vc-dot"></span>
+        <span>Live</span>
+      </div>
+    </div>
+    <div class="discord-vc-content"></div>
+  </div>
+</body>
+</html>
