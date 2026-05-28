@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starting Soon — SixTen</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ═════════════════════════════════════════════════════════ */
+/* // EDIT: COLOR PALETTE — match your Codenames overlay // */
+/* ═════════════════════════════════════════════════════════ */
+:root {
+  --bg:          #000000;
+  --panel:       #050a12;
+  --border:      #1c1c1c;
+
+  --blue:        #2a7de8;          /* headings — your signature blue */
+  --blue-glow:   rgba(42,125,232,0.55);
+  --blue-soft:   #7ab8ff;
+
+  --gold:        #f0c040;          /* in-progress status / parens text */
+  --gold-glow:   rgba(240,192,64,0.5);
+
+  --green:       #2adf80;          /* complete / verified */
+  --green-glow:  rgba(42,223,128,0.6);
+
+  --red:         #ff3a4a;          /* error state */
+  --red-glow:    rgba(255,58,74,0.7);
+
+  --text:        #d8e2f0;
+  --muted:       rgba(216,226,240,0.55);
+  --dim:         rgba(216,226,240,0.30);
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ═════════════════════════════════════════════════════════ */
+/* // EDIT: CANVAS — 1920x1080 standard streaming // */
+/* ═════════════════════════════════════════════════════════ */
+#stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #050a12 0%, #000000 75%);
+}
+
+/* Subtle scanline overlay for terminal feel */
+#stage::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Soft vignette */
+#stage::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* ═════════════════════════════════════════════════════════ */
+/* // EDIT: HEADER PANEL (fixed at top) // */
+/* ═════════════════════════════════════════════════════════ */
+.header-panel {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1400px;
+  text-align: center;
+  z-index: 20;
+}
+
+.header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 78px;
+  font-weight: 900;
+  letter-spacing: 0.32em;
+  color: var(--blue);
+  text-shadow:
+    0 0 20px var(--blue-glow),
+    0 0 40px var(--blue-glow),
+    0 0 80px rgba(42,125,232,0.25);
+  margin-bottom: 12px;
+  animation: titlePulse 4s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { text-shadow: 0 0 20px var(--blue-glow), 0 0 40px var(--blue-glow), 0 0 80px rgba(42,125,232,0.25); }
+  50%      { text-shadow: 0 0 30px var(--blue-glow), 0 0 60px var(--blue-glow), 0 0 120px rgba(42,125,232,0.45); }
+}
+
+.header-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.45em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.header-status {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+.header-status::before, .header-status::after {
+  content: '';
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.spinner-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 12px var(--gold-glow);
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.3; transform: scale(0.6); }
+}
+
+/* Decorative top/bottom borders for the panel */
+.header-border {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  box-shadow: 0 0 12px var(--blue-glow);
+  z-index: 20;
+}
+.header-border.top    { top: 38px;  width: 1700px; }
+.header-border.bottom { top: 232px; width: 1500px; }
+
+/* ═════════════════════════════════════════════════════════ */
+/* // EDIT: CHECKLIST PANEL (scrolling area) // */
+/* ═════════════════════════════════════════════════════════ */
+.checklist-window {
+  position: absolute;
+  top: 290px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1500px;
+  height: 720px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(5,10,18,0.0) 0%, rgba(5,10,18,0.85) 8%, rgba(5,10,18,0.85) 92%, rgba(5,10,18,0.0) 100%);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 5;
+}
+
+/* Fade overlay on top/bottom of scroll window */
+.checklist-window::before,
+.checklist-window::after {
+  content: '';
+  position: absolute; left: 0; right: 0;
+  height: 90px;
+  z-index: 6;
+  pointer-events: none;
+}
+.checklist-window::before { top: 0;    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, transparent 100%); }
+.checklist-window::after  { bottom: 0; background: linear-gradient(0deg,   rgba(0,0,0,0.95) 0%, transparent 100%); }
+
+#checklist {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 60px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Individual line item */
+.line {
+  font-family: 'Orbitron', monospace;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  opacity: 0;
+  color: var(--text);
+}
+
+.line.appearing { opacity: 1; }
+
+/* Indented sub-items */
+.line.sub { padding-left: 60px; font-size: 22px; font-weight: 400; }
+.line.sub-sub { padding-left: 120px; font-size: 19px; font-weight: 400; color: var(--muted); }
+
+.line .num {
+  color: var(--blue);
+  font-weight: 700;
+  text-shadow: 0 0 8px var(--blue-glow);
+  margin-right: 4px;
+  min-width: 36px;
+  display: inline-block;
+}
+
+.line.sub .num { color: var(--blue-soft); }
+.line.sub-sub .num { color: var(--dim); }
+
+.line .label {
+  flex: 0 0 auto;
+}
+
+.line .dots {
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  margin: 0 4px;
+}
+
+.line .status {
+  font-family: 'Share Tech Mono', monospace;
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--gold);
+  text-shadow: 0 0 6px var(--gold-glow);
+}
+
+.line .icon {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: bold;
+  font-size: 1em;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.line .icon.check { color: var(--green); text-shadow: 0 0 8px var(--green-glow); }
+.line .icon.x     { color: var(--red);   text-shadow: 0 0 10px var(--red-glow); animation: errorShake 0.4s ease-out; }
+.line .icon.spin  {
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+  animation: spinIcon 1s linear infinite;
+}
+
+@keyframes spinIcon {
+  to { transform: rotate(360deg); }
+}
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-3px); }
+  40%      { transform: translateX(3px); }
+  60%      { transform: translateX(-2px); }
+  80%      { transform: translateX(2px); }
+}
+
+/* Status fade transitions */
+.line .icon.flicker { animation: flickerFix 0.6s ease-in-out forwards; }
+@keyframes flickerFix {
+  0%   { color: var(--red);   text-shadow: 0 0 10px var(--red-glow);   opacity: 1; }
+  35%  { opacity: 0; }
+  50%  { color: var(--red);   opacity: 0; }
+  65%  { color: var(--green); opacity: 0; }
+  100% { color: var(--green); text-shadow: 0 0 10px var(--green-glow); opacity: 1; }
+}
+
+.line .typing-cursor {
+  display: inline-block;
+  width: 12px;
+  height: 1em;
+  background: var(--blue);
+  margin-left: 6px;
+  animation: blinkCursor 0.7s steps(2) infinite;
+  vertical-align: text-bottom;
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+@keyframes blinkCursor {
+  50% { opacity: 0; }
+}
+
+/* Section-divider style for major top-level items */
+.line.major {
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--text);
+  margin-top: 8px;
+}
+.line.major .num { color: var(--blue); }
+
+/* ═════════════════════════════════════════════════════════ */
+/* // EDIT: FOOTER (bottom of canvas) // */
+/* ═════════════════════════════════════════════════════════ */
+.footer {
+  position: absolute;
+  bottom: 30px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  color: var(--dim);
+  text-transform: uppercase;
+  z-index: 20;
+}
+.footer span.brand { color: var(--blue); text-shadow: 0 0 6px var(--blue-glow); }
+
+/* Audio play fallback button (only shown if browser blocks autoplay) */
+#start-music-btn {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 99999;
+  background: rgba(240,192,64,0.2);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- // EDIT: AUDIO SOURCE — drop your MP3 in the same folder as this HTML // -->
+<!-- // Filename to match the src below, or change src to your filename. // -->
+<audio id="bgm" loop preload="auto">
+  <source src="StartingSoon.mp3" type="audio/mpeg">
+</audio>
+
+<button id="start-music-btn" onclick="document.getElementById('bgm').play(); this.style.display='none';">
+  ▶ Play Music
+</button>
+
+<div id="stage">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- // EDIT: HEADER TITLE + SUBTITLE                  // -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="header-border top"></div>
+  <div class="header-panel">
+    <div class="header-title">STARTING SOON</div>
+    <div class="header-subtitle">SixTen's Pre-Stream Diagnostic</div>
+    <div class="header-status">
+      <span class="spinner-dot"></span>
+      Running System Check
+      <span class="spinner-dot"></span>
+    </div>
+  </div>
+  <div class="header-border bottom"></div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- // SCROLLING CHECKLIST                            // -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="checklist-window">
+    <div id="checklist"></div>
+  </div>
+
+  <!-- // EDIT: FOOTER BRANDING // -->
+  <div class="footer">
+    <span class="brand">SixTen</span> &nbsp; • &nbsp; twitch.tv/61OSixTen &nbsp; • &nbsp; The Syndicate
+  </div>
+
+</div>
+
+<script>
+
+// ═════════════════════════════════════════════════════════
+// // EDIT: CHECKLIST ITEMS — order, text, status messages //
+// ═════════════════════════════════════════════════════════
+// Each item:
+//   level:  'major' | 'sub' | 'sub-sub'   — controls indent + font size
+//   num:    optional number/letter prefix (string)
+//   text:   label that types out
+//   status: italic status message (in parens originally)
+//   icon:   'check' | 'x-then-check' | 'spin'  — final icon
+//
+// 'x-then-check' shows a red X briefly, then "fixes itself" to a green check
+// — sprinkle these in occasionally for personality.
+const ITEMS = [
+  { level: 'major',  num: '01', text: 'Bathroom Break',            status: 'emptying bladder in progress',     icon: 'check' },
+  { level: 'major',  num: '02', text: 'Refill 40oz water bottle',  status: 'lemonade chilling',                icon: 'check' },
+  { level: 'major',  num: '03', text: 'Snacks resupply',           status: 'gathering snacks',                  icon: 'check' },
+  { level: 'major',  num: '04', text: 'Headset on & connected',    status: 'bluetooth handshake successful',    icon: 'check' },
+
+  { level: 'major',  num: '05', text: 'Hair and Makeup',           status: '',                                  icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'Hair',                       status: 'MAX volume',                        icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Makeup (concealer & guyliner)', status: 'flawless',                      icon: 'check' },
+
+  { level: 'major',  num: '06', text: 'Voicemeeter Potato',         status: 'processing',                        icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'A1 — SteelSeries Arctis Nova Pro', status: 'confirmed',                         icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'A2 — Desktop Speakers',      status: 'confirmed',                         icon: 'check' },
+
+  { level: 'major',  num: '07', text: 'Discord open',               status: 'logged in',                         icon: 'check' },
+  { level: 'sub',    num: 'a',  text: 'INPUT  — Voicemeeter Out B2',  status: 'verified',                        icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'OUTPUT — Voicemeeter AUX Input', status: 'verified',                      icon: 'check' },
+  { level: 'sub',    num: 'c',  text: 'Voice Chat — chat bubble blue', status: 'connected',                      icon: 'check' },
+
+  { level: 'major',  num: '08', text: 'Spotify launched',            status: '',                                 icon: 'check' },
+  { level: 'sub',    num: 'a',  text: 'Stream playlist queued',      status: 'hip hop thumpin\'',                icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Voicemeeter + OBS meters react', status: 'verified',                      icon: 'x-then-check' },
+
+  { level: 'major',  num: '09', text: 'Songify open',                status: 'now-playing banner armed',         icon: 'check' },
+  { level: 'sub',    num: 'a',  text: 'Banner matches Spotify track', status: '100%',                            icon: 'check' },
+
+  { level: 'major',  num: '10', text: 'Browser sources',             status: 'processing',                       icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'MS Edge — codenames.game (Stream view)', status: 'running',               icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Chrome — codenames.game (Spymaster view)', status: 'running',             icon: 'check' },
+
+  { level: 'major',  num: '11', text: 'Bots online',                 status: '',                                 icon: 'check' },
+  { level: 'sub',    num: 'a',  text: 'Codenames bot — START-BOT.bat', status: '',                               icon: 'check' },
+  { level: 'sub-sub',num: 'i',  text: 'Post to Discord on Start',     status: 'yes',                             icon: 'check' },
+  { level: 'sub-sub',num: 'ii', text: 'Game URL pasted → Start',      status: 'joined room',                     icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Going-Live notifier',          status: 'processing',                      icon: 'spin' },
+  { level: 'sub-sub',num: 'i',  text: 'Day-of notification sent',     status: 'sent',                            icon: 'check' },
+
+  { level: 'major',  num: '12', text: 'OBS Studio',                   status: 'processing',                      icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'Gaming scene prepped',         status: '100%',                            icon: 'check' },
+  { level: 'sub-sub',num: 'i',  text: 'Stream title set',             status: '',                                icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Starting Soon scene active',   status: '100%',                            icon: 'check' },
+  { level: 'sub',    num: 'c',  text: 'Transitions queued (Starting → Gaming → End Credits)', status: '', icon: 'check' },
+
+  { level: 'major',  num: '13', text: 'Alerts staged',                status: 'processing',                      icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'Mix It Up',                    status: 'connected',                       icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'OWN3D Pro (follows, subs, etc)', status: 'armed',                         icon: 'x-then-check' },
+  { level: 'sub',    num: 'c',  text: 'Fifine Ampligame D6 Soundboard', status: 'ready',                         icon: 'check' },
+
+  { level: 'major',  num: '14', text: 'GO LIVE!',                     status: 'processing',                      icon: 'spin' },
+  { level: 'sub',    num: 'a',  text: 'Audio levels checked',         status: 'in the green',                    icon: 'check' },
+  { level: 'sub',    num: 'b',  text: 'Overlays rendering',           status: 'visible',                         icon: 'check' },
+  { level: 'sub',    num: 'c',  text: 'Webcam framed & lit',          status: 'looking sharp',                   icon: 'check' },
+
+  { level: 'major',  num: '15', text: 'Bathroom Break (round 2)',     status: 'wait, AGAIN?',                    icon: 'spin' },
+];
+
+// ═════════════════════════════════════════════════════════
+// // EDIT: TIMING — feel free to tweak speed/pacing //
+// ═════════════════════════════════════════════════════════
+const TIMING = {
+  charTypingMs:    18,     // per-character speed (lower = faster)
+  thinkingMs:      850,    // ellipsis "thinking" delay
+  resolveMs:       450,    // status text appearance speed
+  iconRevealMs:    220,    // icon flicker-in delay
+  betweenItemsMs:  650,    // pause between items
+  scrollSpeed:     1.2,    // sec for scroll animation between items (cubic-bezier)
+  loopRestartMs:   3500,   // pause before list restarts
+};
+
+const ICONS = {
+  check: '✓',
+  x:     '✗',
+  spin:  '◐',
+};
+
+const checklist = document.getElementById('checklist');
+
+// Sleep helper
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Type out text char-by-char inside an element
+async function typeText(el, text, perChar) {
+  for (let i = 0; i < text.length; i++) {
+    el.textContent += text[i];
+    await sleep(perChar);
+  }
+}
+
+// Build one line element (empty, ready to animate)
+function makeLine(item) {
+  const line = document.createElement('div');
+  line.className = 'line ' + item.level + ' appearing';
+  return line;
+}
+
+// Animate scrolling so the latest item stays roughly in the middle-lower area
+function scrollToShowLatest() {
+  const items = checklist.querySelectorAll('.line');
+  if (items.length === 0) return;
+  // Compute total height of all items
+  const checklistHeight = checklist.scrollHeight;
+  const windowHeight = 720; // checklist window height (see CSS)
+  // We want the latest item to sit at ~70% of the window height from top
+  const targetVisible = windowHeight * 0.55;
+  let translate = checklistHeight - targetVisible;
+  if (translate < 0) translate = 0;
+  checklist.style.transform = `translateY(-${translate}px)`;
+}
+
+// Animate one full item
+async function renderItem(item) {
+  const line = makeLine(item);
+
+  // Number prefix
+  if (item.num) {
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = item.num + '.';
+    line.appendChild(num);
+  }
+
+  // Label container
+  const label = document.createElement('span');
+  label.className = 'label';
+  line.appendChild(label);
+
+  // Typing cursor
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  line.appendChild(cursor);
+
+  checklist.appendChild(line);
+  scrollToShowLatest();
+
+  // Type the label
+  await typeText(label, item.text, TIMING.charTypingMs);
+
+  // Dots (thinking)
+  const dots = document.createElement('span');
+  dots.className = 'dots';
+  line.insertBefore(dots, cursor);
+  await typeText(dots, ' ...', 60);
+  await sleep(TIMING.thinkingMs);
+
+  // Status text in parens (if present)
+  if (item.status) {
+    const status = document.createElement('span');
+    status.className = 'status';
+    line.insertBefore(status, cursor);
+    await typeText(status, ' (' + item.status + ')', TIMING.charTypingMs);
+    await sleep(TIMING.resolveMs);
+  }
+
+  // Icon resolution
+  if (item.icon) {
+    const icon = document.createElement('span');
+    icon.className = 'icon';
+    line.insertBefore(icon, cursor);
+
+    if (item.icon === 'check') {
+      icon.classList.add('check');
+      icon.textContent = ICONS.check;
+    } else if (item.icon === 'spin') {
+      icon.classList.add('spin');
+      icon.textContent = ICONS.spin;
+    } else if (item.icon === 'x-then-check') {
+      // Show X first
+      icon.classList.add('x');
+      icon.textContent = ICONS.x;
+      await sleep(700);
+      // Flicker fix
+      icon.classList.remove('x');
+      icon.classList.add('flicker');
+      icon.textContent = ICONS.check;
+      await sleep(600);
+      icon.classList.remove('flicker');
+      icon.classList.add('check');
+    }
+    await sleep(TIMING.iconRevealMs);
+  }
+
+  // Remove cursor — line is done
+  cursor.remove();
+
+  // Pause before next item
+  await sleep(TIMING.betweenItemsMs);
+}
+
+// Clear the list (for loop restart)
+function clearList() {
+  checklist.innerHTML = '';
+  checklist.style.transform = 'translateY(0)';
+}
+
+// Main loop — runs forever
+async function runChecklist() {
+  while (true) {
+    clearList();
+    for (const item of ITEMS) {
+      await renderItem(item);
+    }
+    // Pause at the bottom before restart
+    await sleep(TIMING.loopRestartMs);
+  }
+}
+
+// ═════════════════════════════════════════════════════════
+// AUDIO — autoplay attempt with click-fallback button
+// ═════════════════════════════════════════════════════════
+window.addEventListener('load', function() {
+  const bgm = document.getElementById('bgm');
+  if (bgm) {
+    bgm.volume = 0.5;
+    const p = bgm.play();
+    if (p && p.catch) {
+      p.catch(function() {
+        document.getElementById('start-music-btn').style.display = 'block';
+      });
+    }
+  }
+  // Start the checklist after a short opening pause
+  setTimeout(runChecklist, 800);
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stream Boot Sequence</title>
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --bg-dark: #000000;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--neon-green);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        #terminal {
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .line {
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeIn 0.1s forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid var(--neon-green);
+        }
+
+        .status-ok { color: #fff; font-weight: bold; }
+        .highlight { color: #ff00ff; }
+
+        /* Animation delays for the "boot" feel */
+        .l1 { animation-delay: 0.5s; width: 0; animation: typing 1s steps(30) 0.5s forwards, opacity 0.1s 0.5s forwards; }
+        .l2 { animation-delay: 1.5s; width: 0; animation: typing 1s steps(30) 1.5s forwards, opacity 0.1s 1.5s forwards; }
+        .l3 { animation-delay: 2.5s; width: 0; animation: typing 1s steps(30) 2.5s forwards, opacity 0.1s 2.5s forwards; }
+        .l4 { animation-delay: 3.5s; width: 0; animation: typing 1s steps(30) 3.5s forwards, opacity 0.1s 3.5s forwards; }
+        .l5 { animation-delay: 4.5s; width: 0; animation: typing 1s steps(30) 4.5s forwards, opacity 0.1s 4.5s forwards; }
+		.l6 { animation-delay: 5.5s; width: 0; animation: typing 1s steps(30) 5.5s forwards, opacity 0.1s 5.5s forwards; }
+        .l7 { animation-delay: 6.5s; width: 0; animation: typing 1s steps(30) 6.5s forwards, opacity 0.1s 6.5s forwards; }
+        .l8 { animation-delay: 7.5s; width: 0; animation: typing 1s steps(30) 7.5s forwards, opacity 0.1s 7.5s forwards; }
+        .l9 { animation-delay: 8.5s; width: 0; animation: typing 1s steps(30) 8.5s forwards, opacity 0.1s 8.5s forwards; }
+        .20 { animation-delay: 9.5s; width: 0; animation: typing 1s steps(30) 9.5s forwards, opacity 0.1s 9.5s forwards; }
+	    .21 { animation-delay: 10.5s; width: 0; animation: typing 1s steps(30) 10.5s forwards, opacity 0.1s 10.5s forwards; }	
+
+        /* The Infinite Loop "Starting Soon" */
+        .starting-soon {
+            font-size: 2.5rem;
+            margin-top: 40px;
+            opacity: 0;
+            animation: blink 1.5s infinite 5.5s;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes opacity {
+            to { opacity: 1; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Scanline Effect */
+        body::before {
+            content: " ";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="terminal">
+        <div class="line l1">> INITIALIZING PERIPHERALS... <span class="status-ok">[DONE]</span></div>
+        <div class="line l2">> WEBCAM: <span class="status-ok">ACTIVE</span></div>
+        <div class="line l3">> AUDIO INTERFACE: <span class="status-ok">CHECK</span></div>
+        <div class="line l4">> LOADING SCENES... <span class="status-ok">100%</span></div>
+		<div class="line l5">> SNACKS... <span class="status-ok">GATHERED</span></div>
+        <div class="line l6">> REFILLING WATER BOTTLE... <span class="status-ok">FULL</span></div>
+		<div class="line l7">> HAIR: <span class="highlight">GORGEOUS</span></div>
+		<div class="line l8">> MAKEUP: <span class="status-ok">FLAWLESS</span></div>
+		<div class="line l9">> LOADING CODENAMES.GAME... <span class="status-ok">100%</span></div>
+        <div class="line 20">> SENDING NOTIFICATIONS <span class="status-ok">SENT</span></div>
+		<div class="line 21">> STREAM STATUS: <span class="highlight">READY</span></div>
+    </div>
+
+    <div class="starting-soon">STARTING SOON</div>
+
+</body>
+</html>
