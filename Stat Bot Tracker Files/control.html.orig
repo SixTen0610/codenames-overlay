@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codenames Bot Control Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:    #2a7de8;
+  --red:     #e8392a;
+  --gold:    #f0c040;
+  --green:   #2adf80;
+  --bg:      #000000;
+  --panel:   #0a0c10;
+  --border:  rgba(255,255,255,0.08);
+  --text:    #e8e6e0;
+  --muted:   rgba(232,230,224,0.45);
+}
+html, body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  min-height: 100vh; padding: 24px;
+}
+h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px; font-weight: 700;
+  color: var(--blue); letter-spacing: 0.15em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.subtitle {
+  font-size: 13px; color: var(--muted);
+  letter-spacing: 0.1em; margin-bottom: 28px;
+}
+.grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; max-width: 1100px; }
+.card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px;
+}
+.card-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+}
+
+/* ── URL Input ── */
+.url-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.url-input {
+  flex: 1; padding: 12px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); font-family: 'Share Tech Mono', monospace;
+  font-size: 13px; outline: none;
+  transition: border-color 0.15s;
+}
+.url-input:focus { border-color: var(--blue); }
+.url-input::placeholder { color: var(--muted); }
+.btn {
+  padding: 12px 24px; border-radius: 6px; border: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.08em;
+  cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:hover { opacity: 0.85; }
+.btn:active { transform: scale(0.97); }
+.btn-start { background: var(--green); color: #000; }
+.btn-stop  { background: var(--red);   color: #fff; }
+.btn-stop:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── Status Bar ── */
+.status-bar {
+  display: flex; gap: 16px; align-items: center;
+  padding: 10px 14px; border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); margin-bottom: 16px;
+  font-size: 13px;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; transition: background 0.3s;
+}
+.dot.green  { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.dot.red    { background: var(--red);   box-shadow: 0 0 8px var(--red); }
+.dot.yellow { background: var(--gold);  box-shadow: 0 0 8px var(--gold); }
+.dot.gray   { background: var(--muted); }
+.status-item { display: flex; align-items: center; gap: 6px; }
+.status-label { color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+.status-val   { font-family: 'Share Tech Mono', monospace; font-size: 12px; }
+
+/* ── Teams ── */
+.teams { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.team-panel {
+  border-radius: 6px; padding: 14px;
+  border: 1px solid var(--border);
+}
+.team-panel.blue { border-color: rgba(42,125,232,0.3); background: rgba(42,125,232,0.05); }
+.team-panel.red  { border-color: rgba(232,57,42,0.3);  background: rgba(232,57,42,0.05); }
+.team-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.25em;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.team-panel.blue .team-label { color: var(--blue); }
+.team-panel.red  .team-label { color: var(--red);  }
+.role-group { margin-bottom: 8px; }
+.role-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+}
+.player-tag {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 999px; font-size: 13px; font-weight: 500;
+  margin: 2px 3px 2px 0;
+}
+.team-panel.blue .player-tag { background: rgba(42,125,232,0.15); color: #7ab8ff; border: 1px solid rgba(42,125,232,0.2); }
+.team-panel.red  .player-tag { background: rgba(232,57,42,0.15);  color: #ff8a7a; border: 1px solid rgba(232,57,42,0.2); }
+.empty-players { font-size: 12px; color: var(--muted); font-style: italic; }
+
+/* ── Clue display ── */
+.clue-display {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 6px;
+  background: rgba(240,192,64,0.06);
+  border: 1px solid rgba(240,192,64,0.2);
+  margin-top: 14px; min-height: 52px;
+}
+.clue-word {
+  font-family: 'Orbitron', monospace;
+  font-size: 20px; font-weight: 700; color: var(--gold);
+  letter-spacing: 0.08em;
+}
+.clue-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px; color: var(--gold); opacity: 0.7;
+}
+.clue-team {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted); margin-left: auto;
+}
+.no-clue { font-size: 13px; color: var(--muted); font-style: italic; }
+
+/* ── Card counts ── */
+.card-counts {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 8px; margin-top: 14px;
+}
+.count-cell {
+  text-align: center; padding: 10px 6px;
+  border-radius: 6px; border: 1px solid var(--border);
+}
+.count-num  { font-family: 'Share Tech Mono', monospace; font-size: 24px; }
+.count-lbl  { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+.count-cell.blue   { border-color: rgba(42,125,232,0.3);  background: rgba(42,125,232,0.05); }
+.count-cell.blue   .count-num { color: var(--blue); }
+.count-cell.red    { border-color: rgba(232,57,42,0.3);   background: rgba(232,57,42,0.05); }
+.count-cell.red    .count-num { color: var(--red); }
+.count-cell.neutral { border-color: rgba(255,255,255,0.1); }
+.count-cell.neutral .count-num { color: var(--muted); }
+.count-cell.assassin { border-color: rgba(255,34,68,0.3); background: rgba(255,34,68,0.05); }
+.count-cell.assassin .count-num { color: #ff2244; }
+
+/* ── Log panel ── */
+.log-panel {
+  height: 420px; overflow-y: auto;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; line-height: 1.8;
+  padding: 12px;
+  background: rgba(0,0,0,0.4); border-radius: 6px;
+  border: 1px solid var(--border);
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.log-line { color: var(--muted); border-bottom: 1px solid rgba(255,255,255,0.02); padding: 2px 0; }
+.log-line.turn     { color: var(--blue); }
+.log-line.red-turn { color: var(--red); }
+.log-line.card     { color: #aaa; }
+.log-line.assassin { color: #ff2244; font-weight: bold; }
+.log-line.win      { color: var(--green); }
+.log-line.clue     { color: var(--gold); }
+.log-line.player   { color: var(--green); }
+.log-line.error    { color: var(--red); }
+
+/* ── Turn indicator ── */
+.turn-indicator {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; padding: 14px;
+  border-radius: 6px; margin-bottom: 16px;
+  font-family: 'Orbitron', monospace;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; transition: all 0.4s;
+}
+.turn-indicator.blue { background: rgba(42,125,232,0.12); border: 1px solid rgba(42,125,232,0.3); color: var(--blue); }
+.turn-indicator.red  { background: rgba(232,57,42,0.12);  border: 1px solid rgba(232,57,42,0.3);  color: var(--red); }
+.turn-indicator.idle { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--muted); }
+.turn-dot { width: 10px; height: 10px; border-radius: 50%; animation: blink 1.2s ease-in-out infinite; }
+.turn-indicator.blue .turn-dot { background: var(--blue); }
+.turn-indicator.red  .turn-dot { background: var(--red); }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+</style>
+</head>
+<body>
+
+<h1>Codenames Bot</h1>
+<div class="subtitle">Spectator bot — reads game state and syncs to OBS overlay</div>
+
+<div class="grid">
+
+  <!-- LEFT COLUMN -->
+  <div>
+    <!-- URL Input -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Game Room URL</div>
+      <div class="url-row">
+        <input class="url-input" id="url-input"
+          placeholder="https://codenames.game/r/xxxx-xxxxx"
+          value="">
+        <button class="btn btn-start" id="btn-start" onclick="startBot()">▶ Start</button>
+        <button class="btn btn-stop"  id="btn-stop"  onclick="stopBot()" disabled>■ Stop</button>
+      </div>
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-item">
+          <div class="dot gray" id="dot-obs"></div>
+          <span class="status-label">OBS</span>
+          <span class="status-val" id="txt-obs">Disconnected</span>
+        </div>
+        <div class="status-item">
+          <div class="dot gray" id="dot-bot"></div>
+          <span class="status-label">Bot</span>
+          <span class="status-val" id="txt-bot">Idle</span>
+        </div>
+        <div class="status-item">
+          <div class="dot gray" id="dot-game"></div>
+          <span class="status-label">Cards</span>
+          <span class="status-val" id="txt-cards">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Turn Indicator -->
+    <div class="turn-indicator idle" id="turn-indicator">
+      <div class="turn-dot" style="display:none" id="turn-dot"></div>
+      <span id="turn-text">Waiting for game...</span>
+    </div>
+
+    <!-- Current Clue -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Current Clue</div>
+      <div class="clue-display" id="clue-display">
+        <span class="no-clue">No clue yet</span>
+      </div>
+    </div>
+
+    <!-- Card Counts -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Cards Remaining</div>
+      <div class="card-counts">
+        <div class="count-cell blue">
+          <div class="count-num" id="cnt-blue">—</div>
+          <div class="count-lbl">Blue</div>
+        </div>
+        <div class="count-cell red">
+          <div class="count-num" id="cnt-red">—</div>
+          <div class="count-lbl">Red</div>
+        </div>
+        <div class="count-cell neutral">
+          <div class="count-num" id="cnt-neutral">—</div>
+          <div class="count-lbl">Neutral</div>
+        </div>
+        <div class="count-cell assassin">
+          <div class="count-num" id="cnt-assassin">—</div>
+          <div class="count-lbl">Assassin</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teams -->
+    <div class="card">
+      <div class="card-title">Teams</div>
+      <div class="teams">
+        <div class="team-panel blue">
+          <div class="team-label">Blue Team</div>
+          <div class="role-group">
+            <div class="role-title">Spymaster</div>
+            <div id="blue-spy"><span class="empty-players">—</span></div>
+          </div>
+          <div class="role-group">
+            <div class="role-title">Operatives</div>
+            <div id="blue-op"><span class="empty-players">—</span></div>
+          </div>
+        </div>
+        <div class="team-panel red">
+          <div class="team-label">Red Team</div>
+          <div class="role-group">
+            <div class="role-title">Spymaster</div>
+            <div id="red-spy"><span class="empty-players">—</span></div>
+          </div>
+          <div class="role-group">
+            <div class="role-title">Operatives</div>
+            <div id="red-op"><span class="empty-players">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN — Live Log -->
+  <div class="card">
+    <div class="card-title" style="display:flex;justify-content:space-between">
+      <span>Live Log</span>
+      <span style="cursor:pointer;color:var(--muted)" onclick="clearLog()">Clear</span>
+    </div>
+    <div class="log-panel" id="log-panel"></div>
+  </div>
+
+</div>
+
+<script>
+var evtSource = null;
+var cardData  = {};
+
+function startBot() {
+  var url = document.getElementById('url-input').value.trim();
+  if (!url || !url.includes('codenames.game')) {
+    addLog('⚠️  Please enter a valid codenames.game URL', 'error');
+    return;
+  }
+  fetch('/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ roomUrl: url })
+  }).then(r => r.json()).then(data => {
+    if (data.ok) {
+      document.getElementById('btn-start').disabled = true;
+      document.getElementById('btn-stop').disabled  = false;
+      setDot('dot-bot', 'yellow');
+      document.getElementById('txt-bot').textContent = 'Joining...';
+      addLog('▶ Bot started → ' + url, 'player');
+      connectSSE();
+    } else {
+      addLog('❌ Error: ' + data.error, 'error');
+    }
+  }).catch(e => addLog('❌ ' + e.message, 'error'));
+}
+
+function stopBot() {
+  fetch('/stop').then(() => {
+    document.getElementById('btn-start').disabled = false;
+    document.getElementById('btn-stop').disabled  = true;
+    setDot('dot-bot', 'gray');
+    document.getElementById('txt-bot').textContent = 'Stopped';
+    setTurnIdle();
+    addLog('■ Bot stopped', 'error');
+  });
+}
+
+function connectSSE() {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource('/events');
+  evtSource.onmessage = function(e) {
+    try { handleEvent(JSON.parse(e.data)); } catch(ex) {}
+  };
+  evtSource.onerror = function() {
+    setDot('dot-bot', 'red');
+  };
+}
+
+function handleEvent(data) {
+  if (data.type === 'log') {
+    var cls = '';
+    if (data.msg.includes('Turn changed') && data.msg.includes('blue')) cls = 'turn';
+    else if (data.msg.includes('Turn changed') && data.msg.includes('red')) cls = 'red-turn';
+    else if (data.msg.includes('Card revealed')) cls = 'card';
+    else if (data.msg.includes('ASSASSIN')) cls = 'assassin';
+    else if (data.msg.includes('Game over')) cls = 'win';
+    else if (data.msg.includes('Clue:')) cls = 'clue';
+    else if (data.msg.includes('Players')) cls = 'player';
+    addLog(data.msg, cls);
+    return;
+  }
+
+  if (data.type === 'turn') {
+    setTurn(data.team);
+  }
+
+  if (data.type === 'players') {
+    updatePlayers(data.players);
+  }
+
+  if (data.type === 'clue') {
+    updateClue(data.clue, data.team);
+  }
+
+  if (data.type === 'card') {
+    // Card count auto-updates via 'state' broadcast below
+  }
+
+  if (data.type === 'assassin') {
+    document.getElementById('turn-indicator').style.borderColor = '#ff2244';
+    addLog('💀 ASSASSIN: ' + data.word, 'assassin');
+  }
+
+  if (data.type === 'gameEnd') {
+    addLog('🏆 ' + data.winner.toUpperCase() + ' WINS!', 'win');
+    setTurnIdle();
+  }
+
+  // Full state broadcast — fires every poll cycle with current snapshot
+  if (data.type === 'state' || data.type === 'fullState') {
+    if (data.activeTurn) setTurn(data.activeTurn);
+    if (data.players)   updatePlayers(data.players);
+    if (data.clue && data.clue.word) updateClue(data.clue, data.activeTurn);
+    if (data.remaining) updateCardCountsFromState(data.remaining, data.revealed);
+    if (typeof data.cardCount === 'number') {
+      document.getElementById('txt-cards').textContent = data.cardCount;
+    }
+  }
+}
+
+function pollStatus() {
+  fetch('/status').then(r => r.json()).then(s => {
+    setDot('dot-obs', s.obsConnected ? 'green' : 'red');
+    document.getElementById('txt-obs').textContent = s.obsConnected ? 'Connected' : 'Disconnected';
+    if (s.polling) {
+      setDot('dot-bot', 'green');
+      document.getElementById('txt-bot').textContent = 'Running';
+    }
+    document.getElementById('txt-cards').textContent = s.cardCount || '—';
+  }).catch(() => {});
+}
+
+// Update card counts directly from state broadcast
+function updateCardCountsFromState(remaining, revealed) {
+  if (remaining) {
+    document.getElementById('cnt-blue').textContent = remaining.blue;
+    document.getElementById('cnt-red').textContent  = remaining.red;
+  }
+  if (revealed) {
+    // neutral & assassin shown as "revealed" counts since spectator
+    // can't see unrevealed neutrals — but assassin reveal IS the game end
+    document.getElementById('cnt-neutral').textContent  = '—';
+    document.getElementById('cnt-assassin').textContent = revealed.assassin > 0 ? '💀' : '—';
+  }
+}
+
+// Legacy fallback (kept for compatibility)
+function updateCardCounts(cards) {
+  if (!cards) return;
+  var counts = { blue:0, red:0, neutral:0, assassin:0 };
+  Object.values(cards).forEach(function(c) {
+    if (!c.revealed && counts[c.color] !== undefined) counts[c.color]++;
+  });
+  document.getElementById('cnt-blue').textContent    = counts.blue;
+  document.getElementById('cnt-red').textContent     = counts.red;
+  document.getElementById('cnt-neutral').textContent = counts.neutral;
+  document.getElementById('cnt-assassin').textContent= counts.assassin;
+}
+
+function setTurn(team) {
+  var ind  = document.getElementById('turn-indicator');
+  var txt  = document.getElementById('turn-text');
+  var dot  = document.getElementById('turn-dot');
+  ind.className = 'turn-indicator ' + team;
+  dot.style.display = 'block';
+  txt.textContent = team.toUpperCase() + ' TEAM\'S TURN';
+}
+
+function setTurnIdle() {
+  var ind = document.getElementById('turn-indicator');
+  ind.className = 'turn-indicator idle';
+  document.getElementById('turn-dot').style.display = 'none';
+  document.getElementById('turn-text').textContent = 'Waiting for game...';
+}
+
+function updatePlayers(players) {
+  setPlayers('blue-spy', players.blueSpy);
+  setPlayers('blue-op',  players.blueOp);
+  setPlayers('red-spy',  players.redSpy);
+  setPlayers('red-op',   players.redOp);
+}
+
+function setPlayers(elId, names) {
+  var el = document.getElementById(elId);
+  if (!names || names.length === 0) {
+    el.innerHTML = '<span class="empty-players">—</span>'; return;
+  }
+  el.innerHTML = names.map(function(n) {
+    return '<span class="player-tag">' + n + '</span>';
+  }).join('');
+}
+
+function updateClue(clue, team) {
+  var el = document.getElementById('clue-display');
+  if (!clue) { el.innerHTML = '<span class="no-clue">No clue yet</span>'; return; }
+  el.innerHTML =
+    '<span class="clue-word">' + clue.word + '</span>' +
+    '<span class="clue-count">×' + clue.count + '</span>' +
+    '<span class="clue-team">' + (team||'').toUpperCase() + ' TEAM</span>';
+}
+
+function setDot(id, color) {
+  var el = document.getElementById(id);
+  el.className = 'dot ' + color;
+}
+
+function addLog(msg, cls) {
+  var panel = document.getElementById('log-panel');
+  var line  = document.createElement('div');
+  line.className = 'log-line ' + (cls || '');
+  line.textContent = msg;
+  panel.appendChild(line);
+  panel.scrollTop = panel.scrollHeight;
+  // Keep max 200 lines
+  while (panel.children.length > 200) panel.removeChild(panel.firstChild);
+}
+
+function clearLog() {
+  document.getElementById('log-panel').innerHTML = '';
+}
+
+// Auto-connect SSE and poll status on load
+window.addEventListener('load', function() {
+  connectSSE();
+  pollStatus();
+  setInterval(pollStatus, 5000);
+});
+</script>
+</body>
+</html>
