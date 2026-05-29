@@ -35,8 +35,12 @@ executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
 ```
 
 Find this line in the `joinRoom` function and update it with your Chrome path.
+Open a command prompt in your Stat Bot Folder
 
-### Step 3 — Run it
+### Step 3 npm_install
+Let the Node Modules install
+
+### Step 4 — Run it
 Double-click **START-BOT.bat**
 
 The control panel will open automatically at http://localhost:7842
