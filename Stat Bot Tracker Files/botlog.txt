@@ -1,0 +1,421 @@
+================================================
+  CODENAMES BOT Starting up...
+ ================================================
+
+ Control panel will open at http://localhost:7842
+ Press Ctrl+C to stop the bot
+
+[10:51:28 PM] 🚀 Codenames Bot control panel → http://localhost:7842
+[10:51:28 PM]    Paste your game URL and click Start
+[10:51:28 PM] 📺 Overlay connected (1 total)
+[10:51:28 PM] ✅ OBS Connected
+[10:51:35 PM] 📨 Discord-on-start: OFF
+[10:51:38 PM] 🎮 Launching browser → https://codenames.game/r/todun-motaf
+[10:51:44 PM] ✅ Joined room: https://codenames.game/r/todun-motaf
+[10:51:44 PM] 📨 Discord post skipped (toggle off)
+[10:51:44 PM] 📡 Polling started
+[10:51:47 PM] 🔄 Turn changed: none → blue
+[10:51:47 PM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":["devin"],"redSpy":[]}
+[10:52:58 PM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":["devin","din din"],"redSpy":[]}
+[10:54:31 PM] 👥 Players updated: {"blueOp":["wiggames"],"blueSpy":[],"redOp":["devin","din din"],"redSpy":[]}
+[10:54:46 PM] 👥 Players updated: {"blueOp":["wiggames"],"blueSpy":[],"redOp":["devin"],"redSpy":["din din"]}
+[10:56:48 PM] 👥 Players updated: {"blueOp":["wiggames"],"blueSpy":["Rdh"],"redOp":["devin"],"redSpy":["din din"]}
+[10:57:52 PM] 👥 Players updated: {"blueOp":["wiggames"],"blueSpy":["Rdh"],"redOp":["devin","Gr8c1318"],"redSpy":["din din"]}
+[11:03:03 PM] 💬 Clue: "HEAD" × 4
+[11:03:03 PM] 🎯 First team this game: BLUE (gave first clue → has 9 cards)
+[11:04:28 PM] 🃏 Card revealed: HAIR (blue)
+[11:04:30 PM] 🃏 Card revealed: BOARD (red)
+[11:04:34 PM] 🔄 Turn changed: blue → red
+[11:08:29 PM] 💬 Clue: "WOODEN" × 2
+[11:09:30 PM] 🃏 Card revealed: HOUSE (red)
+[11:09:33 PM] 🃏 Card revealed: BLOCK (red)
+[11:09:35 PM] 🔄 Turn changed: red → blue
+[11:11:56 PM] 💬 Clue: "COUNTRIES" × 0
+[11:11:59 PM] 👥 Players updated: {"blueOp":["wiggames","ellegeez"],"blueSpy":["Rdh"],"redOp":["devin","Gr8c1318"],"redSpy":["din din"]}
+[11:13:04 PM] 🃏 Card revealed: DOLL (blue)
+[11:13:08 PM] 🃏 Card revealed: SATURN (blue)
+[11:13:13 PM] 🃏 Card revealed: WASHINGTON (blue)
+[11:13:18 PM] 🃏 Card revealed: BOWLER (blue)
+[11:13:26 PM] 🃏 Card revealed: HIMALAYAS (blue)
+[11:13:58 PM] 🔄 Turn changed: blue → red
+[11:14:11 PM] 💬 Clue: "KILIMANJARO" × 4
+[11:15:33 PM] 🃏 Card revealed: AVALANCHE (red)
+[11:15:41 PM] 🔄 Turn changed: red → blue
+[11:16:29 PM] 💬 Clue: "PERCH" × 3
+[11:18:52 PM] 🃏 Card revealed: PARROT (blue)
+[11:19:24 PM] 🔄 Turn changed: blue → red
+[11:19:48 PM] 💬 Clue: "CORPSE" × 0
+[11:20:36 PM] 🃏 Card revealed: UNDERTAKER (red)
+[11:20:40 PM] 🃏 Card revealed: BRAZIL (red)
+[11:20:49 PM] 🃏 Card revealed: ELEPHANT (red)
+[11:22:21 PM] 🏆 Game over — RED wins! (all red cards revealed)
+[11:22:21 PM] 🏆 Broadcasting game end → RED wins
+[11:22:21 PM] 📖 Generating game 1 recap (8 words, 3 players)...
+[11:22:23 PM] 📖 Game 1 recap: "In a twist of fate that defied all logic, din din's cryptic whispers guided devi..."
+[11:23:35 PM] 👥 Players updated: {"blueOp":["wiggames","ellegeez","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","din din"],"redSpy":[]}
+[11:23:36 PM] 👥 Players updated: {"blueOp":["wiggames","ellegeez","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","din din"],"redSpy":[]}
+[11:23:36 PM] 👥 Players updated: {"blueOp":["wiggames","ellegeez","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","din din"],"redSpy":[]}
+[11:23:36 PM] 🆕 New game detected — board re-dealt, tracker reset
+[11:23:43 PM] 👥 Players updated: {"blueOp":["wiggames","ellegeez","Rdh"],"blueSpy":[],"redOp":["Gr8c1318","din din"],"redSpy":["devin"]}
+[11:23:53 PM] 👥 Players updated: {"blueOp":["ellegeez","Rdh"],"blueSpy":["wiggames"],"redOp":["Gr8c1318","din din"],"redSpy":["devin"]}
+[11:23:56 PM] 🔄 Turn changed: none → red
+[11:26:59 PM] 👥 Players updated: {"blueOp":["ellegeez","Rdh"],"blueSpy":["wiggames"],"redOp":["Gr8c1318","din din","Loba"],"redSpy":["devin"]}
+[11:27:30 PM] 💬 Clue: "DOG" × 3
+[11:27:30 PM] 🎯 First team this game: RED (gave first clue → has 9 cards)
+[11:28:34 PM] 🃏 Card revealed: POUND (red)
+[11:28:43 PM] 🔄 Turn changed: red → blue
+[11:32:06 PM] 💬 Clue: "METRONOME" × 3
+[11:32:40 PM] 🃏 Card revealed: SECOND (blue)
+[11:33:06 PM] 🃏 Card revealed: SWING (blue)
+[11:33:10 PM] 🃏 Card revealed: METER (blue)
+[11:33:12 PM] 🔄 Turn changed: blue → red
+[11:34:19 PM] 💬 Clue: "CATS" × 5
+[11:34:54 PM] 👥 Players updated: {"blueOp":["ellegeez","Rdh","Nelllll"],"blueSpy":["wiggames"],"redOp":["Gr8c1318","din din","Loba"],"redSpy":["devin"]}
+[11:36:09 PM] 🃏 Card revealed: STRING (red)
+[11:36:22 PM] 🃏 Card revealed: MEMORY (red)
+[11:36:30 PM] 🃏 Card revealed: SHED (red)
+[11:36:45 PM] 🃏 Card revealed: GOAT (red)
+[11:36:47 PM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":[],"redSpy":[]}
+[11:54:16 PM] ⏹  Polling stopped
+[11:54:17 PM] 🛑 Bot stopped
+[11:54:20 PM] 🔁 Resumed prior session for this room (firstTeam=red)
+[11:54:20 PM] 🎮 Launching browser → https://codenames.game/r/todun-motaf
+[11:54:27 PM] ✅ Joined room: https://codenames.game/r/todun-motaf
+[11:54:27 PM] 📨 Discord post skipped (resumed session — already announced)
+[11:54:27 PM] 📡 Polling started
+[11:54:29 PM] 🔄 Turn changed: none → blue
+[11:54:29 PM] 👥 Players updated: {"blueOp":["Rdh","Nelllll"],"blueSpy":["wiggames"],"redOp":["Gr8c1318","din din","Loba"],"redSpy":["devin"]}
+[11:54:29 PM] 💬 Clue: "COMPUTERS" × 0
+[11:54:29 PM] 🃏 Card revealed: STRING (red)
+[11:54:29 PM] 🃏 Card revealed: BROTHER (red)
+[11:54:29 PM] 🃏 Card revealed: SHED (red)
+[11:54:29 PM] 🃏 Card revealed: MEMORY (red)
+[11:54:29 PM] 🃏 Card revealed: CASTLE (red)
+[11:54:29 PM] 🃏 Card revealed: SECOND (blue)
+[11:54:29 PM] 🃏 Card revealed: POUND (red)
+[11:54:29 PM] 🃏 Card revealed: SWING (blue)
+[11:54:29 PM] 🃏 Card revealed: BISCUIT (red)
+[11:54:29 PM] 🃏 Card revealed: METER (blue)
+[11:54:29 PM] 🃏 Card revealed: GOAT (red)
+[11:56:47 PM] 🃏 Card revealed: FILE (blue)
+[11:56:51 PM] 🃏 Card revealed: GOLD (blue)
+[11:57:03 PM] 🃏 Card revealed: SCROLL (blue)
+[11:58:03 PM] 🃏 Card revealed: POTTER (blue)
+[12:02:35 AM] 🔄 Turn changed: blue → red
+[12:02:45 AM] 💬 Clue: "SCOTTISH" × 1
+[12:03:01 AM] 🏆 Game over — RED wins! (all red cards revealed)
+[12:03:01 AM] 🏆 Broadcasting game end → RED wins
+[12:03:01 AM] 📖 Generating game 2 recap (9 words, 4 players)...
+[12:03:03 AM] 📖 Game 2 recap: "In a classified mission orchestrated by the mysterious spymaster Devin, field ag..."
+[12:04:25 AM] 👥 Players updated: {"blueOp":["Rdh","Nelllll","wiggames"],"blueSpy":[],"redOp":["Gr8c1318","din din","Loba","devin"],"redSpy":[]}
+[12:04:26 AM] 👥 Players updated: {"blueOp":["Rdh","Nelllll","wiggames"],"blueSpy":[],"redOp":["Gr8c1318","din din","Loba","devin"],"redSpy":[]}
+[12:04:26 AM] 🆕 New game detected — board re-dealt, tracker reset
+[12:04:27 AM] 👥 Players updated: {"blueOp":["Rdh","Nelllll","wiggames"],"blueSpy":[],"redOp":["Gr8c1318","din din","Loba","devin"],"redSpy":[]}
+[12:04:43 AM] 👥 Players updated: {"blueOp":["Rdh","Nelllll","wiggames"],"blueSpy":[],"redOp":["din din","Loba","devin"],"redSpy":["Gr8c1318"]}
+[12:05:17 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames"],"blueSpy":["Rdh"],"redOp":["din din","Loba","devin"],"redSpy":["Gr8c1318"]}
+[12:05:32 AM] 🔄 Turn changed: none → red
+[12:07:00 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen"],"blueSpy":["Rdh"],"redOp":["din din","Loba","devin"],"redSpy":["Gr8c1318"]}
+[12:11:27 AM] 💬 Clue: "AUDIO" × 3
+[12:11:27 AM] 🎯 First team this game: RED (gave first clue → has 9 cards)
+[12:12:32 AM] 🃏 Card revealed: SOUND (red)
+[12:12:36 AM] 🃏 Card revealed: RECORD (red)
+[12:13:38 AM] 🔄 Turn changed: red → blue
+[12:14:11 AM] 💬 Clue: "HELIPAD" × 2
+[12:14:31 AM] 🔄 Turn changed: blue → red
+[12:15:48 AM] 💬 Clue: "DETECTIVE" × 1
+[12:16:13 AM] 🃏 Card revealed: SHERLOCK (red)
+[12:16:16 AM] 🔄 Turn changed: red → blue
+[12:17:58 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen"],"blueSpy":["Rdh"],"redOp":["din din","Loba","devin","sub"],"redSpy":["Gr8c1318"]}
+[12:19:45 AM] 💬 Clue: "NOISY" × 2
+[12:21:01 AM] 🃏 Card revealed: HELICOPTER (blue)
+[12:21:07 AM] 🔄 Turn changed: blue → red
+[12:24:38 AM] 💬 Clue: "SPRING" × 3
+[12:25:39 AM] 🃏 Card revealed: MARCH (red)
+[12:25:41 AM] 🃏 Card revealed: AIR (red)
+[12:25:50 AM] 🔄 Turn changed: red → blue
+[12:25:59 AM] 💬 Clue: "PLOT" × 2
+[12:26:39 AM] 🃏 Card revealed: NOVEL (blue)
+[12:26:42 AM] 🃏 Card revealed: SPOT (blue)
+[12:26:47 AM] 🃏 Card revealed: LINE (red)
+[12:26:50 AM] 🔄 Turn changed: blue → red
+[12:29:11 AM] 💬 Clue: "FARMING" × 2
+[12:29:49 AM] 🃏 Card revealed: RANCH (red)
+[12:29:56 AM] 🃏 Card revealed: APPLE (red)
+[12:30:38 AM] 🔄 Turn changed: red → blue
+[12:31:02 AM] 💬 Clue: "SALADS" × 4
+[12:31:15 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen","JOPO"],"blueSpy":["Rdh"],"redOp":["din din","Loba","devin","sub"],"redSpy":["Gr8c1318"]}
+[12:32:19 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen","JOPO"],"blueSpy":["Rdh"],"redOp":["din din","Loba","devin","sub","paythephi"],"redSpy":["Gr8c1318"]}
+[12:32:52 AM] 🃏 Card revealed: CHEESE (blue)
+[12:32:58 AM] 🔄 Turn changed: blue → red
+[12:33:16 AM] 💬 Clue: "TRIANGLE" × 1
+[12:33:37 AM] 🏆 Game over — RED wins! (all red cards revealed)
+[12:33:37 AM] 🏆 Broadcasting game end → RED wins
+[12:33:37 AM] 📖 Generating game 3 recap (9 words, 6 players)...
+[12:33:40 AM] 📖 Game 3 recap: "In a stunning display of espionage chaos, Gr8c1318's elite operatives—din din, L..."
+[12:34:38 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen","JOPO","Rdh"],"blueSpy":[],"redOp":["din din","Loba","devin","sub","paythephi","Gr8c1318"],"redSpy":[]}
+[12:34:39 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen","JOPO","Rdh"],"blueSpy":[],"redOp":["din din","Loba","devin","sub","paythephi","Gr8c1318"],"redSpy":[]}
+[12:34:39 AM] 🆕 New game detected — board re-dealt, tracker reset
+[12:34:40 AM] 👥 Players updated: {"blueOp":["Nelllll","wiggames","SixTen","JOPO","Rdh"],"blueSpy":[],"redOp":["din din","Loba","devin","sub","paythephi","Gr8c1318"],"redSpy":[]}
+[12:34:46 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","JOPO","Rdh"],"blueSpy":[],"redOp":["din din","Loba","devin","sub","paythephi","Gr8c1318"],"redSpy":[]}
+[12:35:32 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","JOPO","Rdh","salty"],"blueSpy":[],"redOp":["din din","Loba","devin","sub","paythephi","Gr8c1318"],"redSpy":[]}
+[12:35:33 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","JOPO","Rdh","salty"],"blueSpy":[],"redOp":["din din","devin","sub","paythephi","Gr8c1318"],"redSpy":["Loba"]}
+[12:35:36 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty"],"blueSpy":["JOPO"],"redOp":["din din","devin","sub","paythephi","Gr8c1318"],"redSpy":["Loba"]}
+[12:35:45 AM] 🔄 Turn changed: none → blue
+[12:37:52 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty"],"blueSpy":["JOPO"],"redOp":["din din","devin","sub","paythephi"],"redSpy":["Loba"]}
+[12:39:30 AM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":[],"redSpy":[]}
+[12:56:38 AM] ⏹  Polling stopped
+[12:56:38 AM] 🛑 Bot stopped
+[12:56:41 AM] 🔁 Resumed prior session for this room (firstTeam=unknown)
+[12:56:41 AM] 🎮 Launching browser → https://codenames.game/r/todun-motaf
+[12:56:48 AM] ✅ Joined room: https://codenames.game/r/todun-motaf
+[12:56:48 AM] 📨 Discord post skipped (resumed session — already announced)
+[12:56:48 AM] 📡 Polling started
+[12:56:50 AM] 🔄 Turn changed: none → red
+[12:56:50 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty","Eggstra"],"blueSpy":["JOPO"],"redOp":["din din","devin","sub","paythephi"],"redSpy":["Loba"]}
+[12:56:50 AM] 🃏 Card revealed: WATER (red)
+[12:56:50 AM] 🃏 Card revealed: PEA (red)
+[12:56:50 AM] 🃏 Card revealed: BOTTLE (blue)
+[12:56:50 AM] 🃏 Card revealed: COW (red)
+[12:56:50 AM] 🃏 Card revealed: ENGINE (red)
+[12:56:50 AM] 🃏 Card revealed: MUSTARD (blue)
+[12:56:50 AM] 🃏 Card revealed: HEAD (blue)
+[12:56:50 AM] 🃏 Card revealed: PENTAGON (red)
+[12:57:00 AM] 💬 Clue: "STERN" × 2
+[12:57:23 AM] 🃏 Card revealed: JUDGE (red)
+[12:57:27 AM] 🃏 Card revealed: CROSS (red)
+[12:57:41 AM] 🔄 Turn changed: red → blue
+[1:00:50 AM] 💬 Clue: "ENJOYMENT" × 0
+[1:02:06 AM] 🃏 Card revealed: GHOST (blue)
+[1:04:12 AM] 🃏 Card revealed: ICE (blue)
+[1:06:20 AM] 🃏 Card revealed: SHERWOOD (red)
+[1:06:24 AM] 🎯 First-team corrected → BLUE (revealed >8 blue cards)
+[1:06:24 AM] 🔄 Turn changed: blue → red
+[1:06:24 AM] 🏆 Game over — RED wins! (win banner: "RED TEAM WINS!")
+[1:06:24 AM] 🏆 Broadcasting game end → RED wins
+[1:06:24 AM] 📖 Generating game 4 recap (8 words, 5 players)...
+[1:06:25 AM] 📖 Game 4 recap: "In a stunning display of espionage gone wrong, Loba's elite team of agents—Din D..."
+[1:07:47 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty","Eggstra","JOPO"],"blueSpy":[],"redOp":["din din","devin","sub","paythephi","Loba"],"redSpy":[]}
+[1:07:48 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty","Eggstra","JOPO"],"blueSpy":[],"redOp":["din din","devin","sub","paythephi","Loba"],"redSpy":[]}
+[1:07:48 AM] 🆕 New game detected — board re-dealt, tracker reset
+[1:07:49 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","salty","Eggstra","JOPO"],"blueSpy":[],"redOp":["din din","devin","sub","paythephi","Loba"],"redSpy":[]}
+[1:08:13 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO"],"blueSpy":["salty"],"redOp":["din din","devin","sub","paythephi","Loba"],"redSpy":[]}
+[1:08:35 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO"],"blueSpy":["salty"],"redOp":["din din","devin","paythephi","Loba"],"redSpy":["sub"]}
+[1:08:41 AM] 🔄 Turn changed: none → blue
+[1:09:00 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO"],"blueSpy":["salty"],"redOp":["din din","devin","paythephi"],"redSpy":["sub"]}
+[1:13:21 AM] 💬 Clue: "INSTRUCTIONS" × 3
+[1:13:21 AM] 🎯 First team this game: BLUE (gave first clue → has 9 cards)
+[1:14:01 AM] 🃏 Card revealed: PAGE (blue)
+[1:14:11 AM] 🔄 Turn changed: blue → red
+[1:14:46 AM] 💬 Clue: "SKIN" × 2
+[1:15:36 AM] 🃏 Card revealed: PIG (red)
+[1:15:45 AM] 🃏 Card revealed: ARM (red)
+[1:15:48 AM] 🔄 Turn changed: red → blue
+[1:17:53 AM] 💬 Clue: "SMALL" × 0
+[1:19:00 AM] 🃏 Card revealed: SOLDIER (blue)
+[1:19:05 AM] 🃏 Card revealed: MINUTE (blue)
+[1:19:11 AM] 🃏 Card revealed: STEP (blue)
+[1:19:15 AM] 🃏 Card revealed: QUARTER (red)
+[1:19:17 AM] 🔄 Turn changed: blue → red
+[1:20:18 AM] 💬 Clue: "FIGHTER" × 2
+[1:21:06 AM] 🃏 Card revealed: NINJA (red)
+[1:21:26 AM] 🃏 Card revealed: MUSKETEER (red)
+[1:21:30 AM] 🔄 Turn changed: red → blue
+[1:22:02 AM] 💬 Clue: "ENROBED" × 5
+[1:22:31 AM] 🃏 Card revealed: ANGEL (red)
+[1:22:34 AM] 🔄 Turn changed: blue → red
+[1:24:10 AM] 💬 Clue: "FLOATIE" × 2
+[1:24:58 AM] 🃏 Card revealed: RIVER (red)
+[1:25:08 AM] 🏆 Game over — RED wins! (all red cards revealed)
+[1:25:08 AM] 🏆 Broadcasting game end → RED wins
+[1:25:08 AM] 📖 Generating game 5 recap (8 words, 5 players)...
+[1:25:12 AM] 📖 Game 5 recap: "In a stunning turn of espionage, sub's cryptic whispers guided din din, devin, p..."
+[1:25:57 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO","salty"],"blueSpy":[],"redOp":["din din","devin","paythephi","sub"],"redSpy":[]}
+[1:25:58 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO","salty"],"blueSpy":[],"redOp":["din din","devin","paythephi","sub"],"redSpy":[]}
+[1:25:58 AM] 🆕 New game detected — board re-dealt, tracker reset
+[1:25:59 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","Eggstra","JOPO","salty"],"blueSpy":[],"redOp":["din din","devin","paythephi","sub"],"redSpy":[]}
+[1:26:20 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty"],"blueSpy":["Eggstra"],"redOp":["din din","devin","paythephi","sub"],"redSpy":[]}
+[1:26:32 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty"],"blueSpy":["Eggstra"],"redOp":["din din","devin","sub"],"redSpy":["paythephi"]}
+[1:26:38 AM] 🔄 Turn changed: none → red
+[1:27:01 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO"],"blueSpy":["Eggstra"],"redOp":["din din","devin","sub","salty"],"redSpy":["paythephi"]}
+[1:27:15 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty"],"blueSpy":["Eggstra"],"redOp":["din din","devin","sub"],"redSpy":["paythephi"]}
+[1:27:40 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty"],"blueSpy":["Eggstra"],"redOp":["din din","devin","sub","Chillin"],"redSpy":["paythephi"]}
+[1:29:26 AM] 💬 Clue: "IPOD" × 4
+[1:29:26 AM] 🎯 First team this game: RED (gave first clue → has 9 cards)
+[1:30:32 AM] 🔄 Turn changed: red → blue
+[1:31:26 AM] 💬 Clue: "SHOT" × 3
+[1:33:48 AM] 🃏 Card revealed: DEATH (blue)
+[1:33:48 AM] 🃏 Card revealed: PISTOL (blue)
+[1:33:48 AM] 🃏 Card revealed: ROULETTE (red)
+[1:33:49 AM] 🔄 Turn changed: blue → red
+[1:41:50 AM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":[],"redSpy":[]}
+[1:51:35 AM] ⏹  Polling stopped
+[1:51:35 AM] 🛑 Bot stopped
+[1:51:37 AM] 🔁 Resumed prior session for this room (firstTeam=red)
+[1:51:37 AM] 🎮 Launching browser → https://codenames.game/r/todun-motaf
+[1:51:43 AM] ✅ Joined room: https://codenames.game/r/todun-motaf
+[1:51:43 AM] 📨 Discord post skipped (resumed session — already announced)
+[1:51:43 AM] 📡 Polling started
+[1:51:46 AM] 🔄 Turn changed: none → red
+[1:51:46 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty"],"blueSpy":["Eggstra"],"redOp":["din din","devin","sub","Chillin"],"redSpy":["paythephi"]}
+[1:51:46 AM] 🃏 Card revealed: DEATH (blue)
+[1:51:46 AM] 🃏 Card revealed: BLUES (red)
+[1:51:46 AM] 🃏 Card revealed: PISTOL (blue)
+[1:51:46 AM] 🃏 Card revealed: PORT (red)
+[1:51:46 AM] 🃏 Card revealed: OPERA (red)
+[1:51:46 AM] 🃏 Card revealed: SHAMPOO (blue)
+[1:51:46 AM] 🃏 Card revealed: ROPE (blue)
+[1:51:46 AM] 🃏 Card revealed: SPOON (red)
+[1:51:46 AM] 🃏 Card revealed: ROULETTE (red)
+[1:51:46 AM] 🃏 Card revealed: SLIP (blue)
+[1:53:34 AM] 💬 Clue: "GRAYING" × 0
+[1:56:08 AM] 🔄 Turn changed: red → blue
+[1:57:37 AM] 💬 Clue: "ADRIATIC" × 2
+[1:58:03 AM] 🃏 Card revealed: SAIL (blue)
+[1:58:07 AM] 🃏 Card revealed: GREECE (blue)
+[2:01:55 AM] 🏆 Game over — BLUE wins! (all blue cards revealed)
+[2:01:55 AM] 🏆 Broadcasting game end → BLUE wins
+[2:01:55 AM] 📖 Generating game 6 recap (8 words, 6 players)...
+[2:01:58 AM] 📖 Game 6 recap: "In a death-defying mission across GREECE, spymaster Eggstra sent field agents wi..."
+[2:03:45 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":[],"redOp":["din din","devin","sub","Chillin","paythephi"],"redSpy":[]}
+[2:03:46 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":[],"redOp":["din din","devin","sub","Chillin","paythephi"],"redSpy":[]}
+[2:03:46 AM] 🆕 New game detected — board re-dealt, tracker reset
+[2:03:47 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":[],"redOp":["din din","devin","sub","Chillin","paythephi"],"redSpy":[]}
+[2:04:07 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":["Six-SPY"],"redOp":["din din","devin","sub","Chillin","paythephi"],"redSpy":[]}
+[2:04:58 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":["Six-SPY"],"redOp":["din din","devin","sub","paythephi"],"redSpy":["Chillin"]}
+[2:05:24 AM] 🔄 Turn changed: none → blue
+[2:07:46 AM] 💬 Clue: "CROOK" × 0
+[2:07:46 AM] 🎯 First team this game: BLUE (gave first clue → has 9 cards)
+[2:11:36 AM] 🃏 Card revealed: BOXER (blue)
+[2:11:41 AM] 🃏 Card revealed: PILOT (blue)
+[2:11:57 AM] 🃏 Card revealed: CURRY (blue)
+[2:13:47 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":["Six-SPY"],"redOp":["din din","devin","sub","paythephi","Squallity"],"redSpy":["Chillin"]}
+[2:13:54 AM] 🔄 Turn changed: blue → red
+[2:14:14 AM] 💬 Clue: "HELLS" × 2
+[2:14:30 AM] 🃏 Card revealed: KITCHEN (red)
+[2:14:33 AM] 🃏 Card revealed: NEW YORK (red)
+[2:14:40 AM] 🔄 Turn changed: red → blue
+[2:18:49 AM] 💬 Clue: "CAST" × 2
+[2:22:54 AM] 🃏 Card revealed: SLING (blue)
+[2:23:27 AM] 🔄 Turn changed: blue → red
+[2:24:02 AM] 💬 Clue: "MASKS" × 3
+[2:24:51 AM] 🃏 Card revealed: THIEF (red)
+[2:24:55 AM] 🃏 Card revealed: EYE (red)
+[2:26:27 AM] 🔄 Turn changed: red → blue
+[2:28:50 AM] 💬 Clue: "ITCH" × 1
+[2:29:12 AM] 🃏 Card revealed: SCRATCH (blue)
+[2:30:33 AM] 🔄 Turn changed: blue → red
+[2:32:00 AM] 💬 Clue: "RIP" × 0
+[2:33:05 AM] 🃏 Card revealed: HAMBURGER (red)
+[2:33:12 AM] 👥 Players updated: {"blueOp":["wiggames","SixTen","Rdh","JOPO","salty","Eggstra"],"blueSpy":["Six-SPY"],"redOp":["din din","devin","sub","paythephi","Squallity","Gr8c1318"],"redSpy":["Chillin"]}
+[2:33:19 AM] 🃏 Card revealed: TOKYO (red)
+[2:34:02 AM] 🔄 Turn changed: red → blue
+[2:34:19 AM] 💬 Clue: "ONION" × 4
+[2:36:46 AM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":[],"redSpy":[]}
+[2:53:51 AM] ⏹  Polling stopped
+[2:53:52 AM] 🛑 Bot stopped
+[2:53:53 AM] 🎮 Launching browser → https://codenames.game/r/todun-motaf
+[2:54:02 AM] ✅ Joined room: https://codenames.game/r/todun-motaf
+[2:54:02 AM] 📨 Discord post skipped (toggle off)
+[2:54:02 AM] 📡 Polling started
+[2:54:04 AM] 🔄 Turn changed: none → blue
+[2:54:04 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318","Chillin"],"redSpy":["Squallity"]}
+[2:54:56 AM] 💬 Clue: "UNIVERSITY" × 5
+[2:54:56 AM] 🎯 First team this game: BLUE (gave first clue → has 9 cards)
+[2:57:14 AM] 🃏 Card revealed: PAPER (blue)
+[2:57:17 AM] 🃏 Card revealed: EINSTEIN (blue)
+[2:57:31 AM] 🃏 Card revealed: NOTE (blue)
+[2:57:49 AM] 🃏 Card revealed: NOVEL (blue)
+[2:59:38 AM] 🔄 Turn changed: blue → red
+[3:00:19 AM] 💬 Clue: "FOOD" × 2
+[3:01:16 AM] 🔄 Turn changed: red → blue
+[3:01:25 AM] 💬 Clue: "SLOW" × 0
+[3:04:25 AM] 🃏 Card revealed: REINDEER (blue)
+[3:04:31 AM] 🃏 Card revealed: MOSQUITO (blue)
+[3:04:47 AM] 🔄 Turn changed: blue → red
+[3:05:53 AM] 💬 Clue: "PAINT" × 0
+[3:06:48 AM] 🃏 Card revealed: BRUSH (red)
+[3:06:53 AM] 🃏 Card revealed: GUM (red)
+[3:06:58 AM] 🃏 Card revealed: DRESSING (red)
+[3:07:57 AM] 🃏 Card revealed: WAR (red)
+[3:08:46 AM] 🃏 Card revealed: CAVE (red)
+[3:08:53 AM] 🔄 Turn changed: red → blue
+[3:09:07 AM] 💬 Clue: "PAGEANT" × 0
+[3:09:43 AM] 🃏 Card revealed: MISS (blue)
+[3:10:41 AM] 🃏 Card revealed: FIELD (blue)
+[3:12:17 AM] 🏆 Game over — BLUE wins! (all blue cards revealed)
+[3:12:17 AM] 🏆 Broadcasting game end → BLUE wins
+[3:12:17 AM] 📖 Generating game 7 recap (9 words, 6 players)...
+[3:12:19 AM] 📖 Game 7 recap: "In a stunning display of espionage brilliance, Rdh's secret operatives SixTen, J..."
+[3:13:01 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:03 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:04 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:05 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:06 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:07 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:09 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:10 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:11 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:12 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:13 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:15 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:16 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:17 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:18 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:19 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:21 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:22 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:23 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:24 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:25 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:27 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:28 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:29 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:30 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:31 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:33 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:34 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:35 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:36 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:37 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:39 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:40 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:41 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:42 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:43 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames"],"blueSpy":["Rdh"],"redOp":["din din","devin","Gr8c1318"],"redSpy":["Squallity"]}
+[3:13:45 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames","Rdh"],"blueSpy":[],"redOp":["din din","devin","Gr8c1318","Squallity"],"redSpy":[]}
+[3:13:46 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames","Rdh"],"blueSpy":[],"redOp":["din din","devin","Gr8c1318","Squallity"],"redSpy":[]}
+[3:13:46 AM] 🆕 New game detected — board re-dealt, tracker reset
+[3:13:47 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames","Rdh"],"blueSpy":[],"redOp":["din din","devin","Gr8c1318","Squallity"],"redSpy":[]}
+[3:14:16 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","Squallity"],"redSpy":["din din"]}
+[3:14:31 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","salty","Eggstra","taeyyo","wiggames"],"blueSpy":[],"redOp":["devin","Gr8c1318","Squallity","Rdh"],"redSpy":["din din"]}
+[3:14:39 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","Eggstra","taeyyo","wiggames"],"blueSpy":[],"redOp":["devin","Gr8c1318","Squallity","Rdh","salty"],"redSpy":["din din"]}
+[3:14:43 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","Eggstra","taeyyo","wiggames","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","Squallity","salty"],"redSpy":["din din"]}
+[3:14:46 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","Eggstra","wiggames","Rdh"],"blueSpy":[],"redOp":["devin","Gr8c1318","Squallity","salty","taeyyo"],"redSpy":["din din"]}
+[3:15:28 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","Eggstra","wiggames","Rdh"],"blueSpy":["taeyyo"],"redOp":["devin","Gr8c1318","Squallity","salty"],"redSpy":["din din"]}
+[3:15:36 AM] 🔄 Turn changed: none → red
+[3:18:16 AM] 💬 Clue: "ROULETTE" × 2
+[3:18:16 AM] 🎯 First team this game: RED (gave first clue → has 9 cards)
+[3:18:45 AM] 🃏 Card revealed: CASINO (red)
+[3:18:48 AM] 🃏 Card revealed: PISTOL (red)
+[3:18:56 AM] 🔄 Turn changed: red → blue
+[3:20:18 AM] 👥 Players updated: {"blueOp":["SixTen","JOPO","Eggstra","wiggames","Rdh"],"blueSpy":["taeyyo"],"redOp":["devin","Gr8c1318","Squallity","salty","Lurioll"],"redSpy":["din din"]}
+[3:20:38 AM] 💬 Clue: "DOOR" × 4
+[3:21:36 AM] 🃏 Card revealed: THEATER (blue)
+[3:21:39 AM] 🃏 Card revealed: OVEN (blue)
+[3:21:43 AM] 🃏 Card revealed: WINDOW (blue)
+[3:21:49 AM] 🔄 Turn changed: blue → red
+[3:23:03 AM] 💬 Clue: "SATELLITE" × 2
+[3:26:02 AM] 🃏 Card revealed: NEPTUNE (red)
+[3:26:08 AM] 🔄 Turn changed: red → blue
+[3:27:21 AM] 💬 Clue: "SEA" × 2
+[3:28:17 AM] 🃏 Card revealed: PACIFIC (blue)
+[3:28:20 AM] 🃏 Card revealed: BISCUIT (blue)
+[3:28:25 AM] 🃏 Card revealed: STORM (blue)
+[3:28:28 AM] 🔄 Turn changed: blue → red
+[3:29:34 AM] 💬 Clue: "GARNISHES" × 3
+[3:30:07 AM] 🃏 Card revealed: POTATO (red)
+[3:30:11 AM] 🃏 Card revealed: MUSTARD (red)
+[3:32:21 AM] 🔄 Turn changed: red → blue
+[3:37:08 AM] 💬 Clue: "MORAVIA" × 2
+[3:39:05 AM] 👥 Players updated: {"blueOp":[],"blueSpy":[],"redOp":[],"redSpy":[]}
+[4:07:06 AM] 📺 Overlay disconnected (0 remaining)
