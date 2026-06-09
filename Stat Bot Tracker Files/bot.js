@@ -23,7 +23,7 @@ const WebSocket = require('ws');
 // ─────────────────────────────────────────────────────────
 const CONFIG = {
   obsHost:     'ws://localhost:4455',
-  obsPassword: 'Riddick610',           // your OBS websocket password
+  obsPassword: '',           // your OBS websocket password
   pollInterval: 1200,        // ms between game state checks
   controlPort:  7842,        // local web server port for control panel
   botName: '🤖 StatBot©',   // ← the spectator name shown in-game (rename as you like)
@@ -73,7 +73,7 @@ const CONFIG = {
   // Treat apiKey like a password. Cost is ~$0.0003 per story (basically free).
   story: {
     enabled:  true,
-    apiKey:   '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',                          // ← paste your Anthropic API key here (starts with sk-ant-)
+    apiKey:   '',                          // ← paste your Anthropic API key here (starts with sk-ant-)
     model:    'claude-haiku-4-5-20251001', // cheap + fast; good enough for short comedic recaps
     maxGames: 8,                           // cap stored stories so the end-credits scroll isn't endless
   },
